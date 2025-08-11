@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispensador de Llaves</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="user-info">
+                <div class="avatar">
+                    <span>DM</span>
+                </div>
+                <div class="user-details">
+                    <div class="welcome">Bienvenido Diego Mendez</div>
+                    <div class="role">Su rol es: Administrador</div>
+                </div>
+            </div>
+            
+            <div class="menu-item active">
+                <span class="menu-icon">📋</span>
+                Menu Principal
+            </div>
+            
+            <div class="menu-item">
+                <span class="menu-icon">▷</span>
+                Agregar Instru/Aseo/Vigilante
+            </div>
+            
+            <div class="menu-item">
+                <span class="menu-icon">▷</span>
+                Agregar Llaves
+            </div>
+            
+            <div class="menu-item">
+                <span class="menu-icon">▷</span>
+                Agregar Programación Semanal
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Dispensador de llaves</h1>
+            </div>
+
+            <div class="content">
+                <div class="section">
+                    <h2>Agregar Llave</h2>
+                    <button class="btn-primary" onclick="showAddKeyModal()">Nueva Llave</button>
+                </div>
+
+                <div class="section">
+                    <h2>Llaves Registradas</h2>
+                    <div class="keys-grid" id="keysGrid">
+                        <!-- Las llaves se cargarán dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decorative keys illustration -->
+            <div class="keys-illustration">
+                <svg width="120" height="80" viewBox="0 0 120 80" fill="none">
+                    <circle cx="95" cy="40" r="25" fill="#4CAF50"/>
+                    <path d="M20 40 L70 40 M65 35 L70 40 L65 45 M75 35 C80 35 85 40 85 40 C85 40 80 45 75 45 L75 35 Z" stroke="#4CAF50" stroke-width="3" fill="none"/>
+                    <circle cx="80" cy="40" r="8" fill="none" stroke="#4CAF50" stroke-width="2"/>
+                    <circle cx="80" cy="40" r="3" fill="#4CAF50"/>
+                    <path d="M85 35 L90 30 M85 45 L90 50" stroke="#4CAF50" stroke-width="2"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

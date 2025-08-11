@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispensador de Llaves - Sistema Avanzado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="floating-particles"></div>
+    </div>
+    
+    <div class="container">
+        <div class="content-box">
+            <!-- Título rotando en círculos alrededor del reloj -->
+            <div class="rotating-title">
+                <div class="title-circle">
+                    <span class="title-letter" style="--i:0">B</span>
+                    <span class="title-letter" style="--i:1">I</span>
+                    <span class="title-letter" style="--i:2">E</span>
+                    <span class="title-letter" style="--i:3">N</span>
+                    <span class="title-letter" style="--i:4">V</span>
+                    <span class="title-letter" style="--i:5">E</span>
+                    <span class="title-letter" style="--i:6">N</span>
+                    <span class="title-letter" style="--i:7">I</span>
+                    <span class="title-letter" style="--i:8">D</span>
+                    <span class="title-letter" style="--i:9">O</span>
+                    <span class="title-letter" style="--i:10">S</span>
+                    <span class="title-letter" style="--i:11"> </span>
+                    <span class="title-letter" style="--i:12">A</span>
+                    <span class="title-letter" style="--i:13">L</span>
+                    <span class="title-letter" style="--i:14"> </span>
+                    <span class="title-letter" style="--i:15">D</span>
+                    <span class="title-letter" style="--i:16">I</span>
+                    <span class="title-letter" style="--i:17">S</span>
+                    <span class="title-letter" style="--i:18">P</span>
+                    <span class="title-letter" style="--i:19">E</span>
+                    <span class="title-letter" style="--i:20">N</span>
+                    <span class="title-letter" style="--i:21">S</span>
+                    <span class="title-letter" style="--i:22">A</span>
+                    <span class="title-letter" style="--i:23">D</span>
+                    <span class="title-letter" style="--i:24">O</span>
+                    <span class="title-letter" style="--i:25">R</span>
+                    <span class="title-letter" style="--i:26"> </span>
+                    <span class="title-letter" style="--i:27">D</span>
+                    <span class="title-letter" style="--i:28">E</span>
+                    <span class="title-letter" style="--i:29"> </span>
+                    <span class="title-letter" style="--i:30">L</span>
+                    <span class="title-letter" style="--i:31">L</span>
+                    <span class="title-letter" style="--i:32">A</span>
+                    <span class="title-letter" style="--i:33">V</span>
+                    <span class="title-letter" style="--i:34">E</span>
+                    <span class="title-letter" style="--i:35">S</span>
+                </div>
+            </div>
+
+            <!-- Reloj analógico mejorado -->
+            <div class="clock-container">
+                <div class="clock">
+                    <div class="clock-glow"></div>
+                    <div class="clock-face">
+                        <div class="hour-markers">
+                            <div class="marker" data-hour="12">12</div>
+                            <div class="marker" data-hour="1">1</div>
+                            <div class="marker" data-hour="2">2</div>
+                            <div class="marker" data-hour="3">3</div>
+                            <div class="marker" data-hour="4">4</div>
+                            <div class="marker" data-hour="5">5</div>
+                            <div class="marker" data-hour="6">6</div>
+                            <div class="marker" data-hour="7">7</div>
+                            <div class="marker" data-hour="8">8</div>
+                            <div class="marker" data-hour="9">9</div>
+                            <div class="marker" data-hour="10">10</div>
+                            <div class="marker" data-hour="11">11</div>
+                        </div>
+                        <div class="clock-hands">
+                            <div class="hour-hand" id="hourHand"></div>
+                            <div class="minute-hand" id="minuteHand"></div>
+                            <div class="second-hand" id="secondHand"></div>
+                            <div class="center-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contador regresivo mejorado -->
+            <div class="countdown-container">
+                <div class="countdown-item">
+                    <div class="countdown-circle">
+                        <div class="progress-ring">
+                            <svg class="progress-svg">
+                                <circle class="progress-circle-bg" cx="40" cy="40" r="35"></circle>
+                                <circle class="progress-circle" cx="40" cy="40" r="35" id="daysProgress"></circle>
+                            </svg>
+                        </div>
+                        <span class="countdown-number" id="days">30</span>
+                    </div>
+                    <span class="countdown-label">DAYS</span>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-circle">
+                        <div class="progress-ring">
+                            <svg class="progress-svg">
+                                <circle class="progress-circle-bg" cx="40" cy="40" r="35"></circle>
+                                <circle class="progress-circle" cx="40" cy="40" r="35" id="hoursProgress"></circle>
+                            </svg>
+                        </div>
+                        <span class="countdown-number" id="hours">12</span>
+                    </div>
+                    <span class="countdown-label">HOURS</span>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-circle">
+                        <div class="progress-ring">
+                            <svg class="progress-svg">
+                                <circle class="progress-circle-bg" cx="40" cy="40" r="35"></circle>
+                                <circle class="progress-circle" cx="40" cy="40" r="35" id="minutesProgress"></circle>
+                            </svg>
+                        </div>
+                        <span class="countdown-number" id="minutes">33</span>
+                    </div>
+                    <span class="countdown-label">MINUTES</span>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-circle">
+                        <div class="progress-ring">
+                            <svg class="progress-svg">
+                                <circle class="progress-circle-bg" cx="40" cy="40" r="35"></circle>
+                                <circle class="progress-circle" cx="40" cy="40" r="35" id="secondsProgress"></circle>
+                            </svg>
+                        </div>
+                        <span class="countdown-number" id="seconds">39</span>
+                    </div>
+                    <span class="countdown-label">SECONDS</span>
+                </div>
+            </div>
+
+            <!-- Botón de huella dactilar -->
+            <div class="fingerprint-button-container">
+                <button class="fingerprint-button" id="fingerprintBtn">
+                    <div class="button-content">
+                        <div class="fingerprint-icon">
+                            <div class="fingerprint-lines"></div>
+                        </div>
+                        <span class="button-text">DIGITE SU HUELLA</span>
+                        <div class="arrow">→</div>
+                    </div>
+                    <div class="button-ripple"></div>
+                    <div class="scanning-effect"></div>
+                </button>
+            </div>
+
+            <!-- Modal de escaneo -->
+            <div class="modal-overlay" id="scanModal">
+                <div class="modal-content">
+                    <div class="scanner-container">
+                        <div class="fingerprint-scanner">
+                            <div class="scanner-light"></div>
+                            <div class="scanner-grid"></div>
+                        </div>
+                        <div class="scan-status">
+                            <h3 id="scanStatus">Coloque su dedo en el escáner</h3>
+                            <div class="scan-progress">
+                                <div class="scan-bar" id="scanBar"></div>
+                            </div>
+                        </div>
+                        <button class="close-modal" id="closeModal">×</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

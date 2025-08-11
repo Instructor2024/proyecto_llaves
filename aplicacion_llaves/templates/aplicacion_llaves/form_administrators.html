@@ -1,0 +1,252 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Instructor - Dispensador de Llaves</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* FORZAR formato exacto del dashboard principal - NO MODIFICAR */
+        body, .container, .dashboard, .sidebar, .main-content {
+            /* Usar SOLO los estilos del dashboard.css */
+        }
+        
+        /* Eliminar cualquier estilo personalizado que pueda interferir */
+        .header, .content, .content h2, .content p {
+            /* Usar SOLO los estilos del dashboard.css */
+        }
+
+        /* Colores del usuario */
+        .welcome, .user-name, .role, .user-avatar {
+            color: #008F39 !important;
+        }
+        .user-role {
+            color: #333 !important;
+        }
+
+        /* Estilos del formulario */
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #008F39;
+            font-weight: 500;
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            outline: none;
+            border-color: #008F39;
+        }
+
+        .btn {
+            background-color: #008F39;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #006b2e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 143, 57, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-container">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-details">
+                            <div class="welcome">Bienvenido <span class="user-name clickable-user" data-action="change-password">{{ nickname }}</span></div>
+                            <div class="user-role">Correo: <span class="role clickable-user" data-action="change-password">{{ user_email }}</span></div>
+                        </div>
+                    </div>
+                    <div class="separator"></div>
+                    <nav class="nav-menu">
+                        <ul>
+                            <li>
+                                <a href="{% url 'dashboard' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                    Menu Principal
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'vistas_index' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Agregar Instru/Aseo/Vigilante
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'environments' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Consultar Ambientes
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'vistas_fragme_14_15' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Consultar Programación
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+
+                        </ul>
+                    </nav>
+                    
+                    <!-- Botón de Salida -->
+                    <div class="separator"></div>
+                    <a href="{% url 'logout' %}" class="logout-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16,17 21,12 16,7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="header">
+                    <h1>Dispensador de llaves</h1>
+                </div>
+                <div class="content">
+                    <h2>Agregar Instructor</h2>
+                    <p>Registra un nuevo instructor en el sistema:</p>
+                    
+                    <div class="form-container">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-field">
+                                        <label for="id_nombre">Nombre:</label>
+                                        {{ form.nombre }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-field">
+                                        <label for="id_apellido">Apellido:</label>
+                                        {{ form.apellido }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-field">
+                                        <label for="id_email">Email:</label>
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-field">
+                                        <label for="id_telefono">Teléfono:</label>
+                                        {{ form.telefono }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-field">
+                                        <label for="id_tipo">Tipo:</label>
+                                        {{ form.tipo }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-field">
+                                        <label for="id_estado">Estado:</label>
+                                        {{ form.estado }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn">Guardar Instructor</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-decoration">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bottom-key">
+            <path d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar event listeners a los elementos clickeables
+            const clickableElements = document.querySelectorAll('.clickable-user');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Redirigir a la página de cambio de contraseña
+                    window.location.href = '{% url "change_password" %}';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

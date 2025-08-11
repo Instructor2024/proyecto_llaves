@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispensador de llaves</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="back-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <div class="user-details">
+                    <div class="welcome-text">Bienvenido <span class="clickable-user" data-action="change-password">Diego Mendez</span></div>
+                    <div class="role-text">Correo: <span class="clickable-user" data-action="change-password">DiegoMendez@gmail.com</span></div>
+                </div>
+            </div>
+
+            <div class="menu-options">
+                <div class="menu-item active">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                    <span>Cambiar Nombre de Usuario</span>
+                </div>
+
+                <div class="menu-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                    <span>Cerrar Sesion</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Dispensador de llaves</h1>
+            </div>
+
+            <div class="form-container">
+                <h2>Cambiar Nombre</h2>
+                
+                <form id="changeNameForm">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" value="Diego Mendez" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nuevoNombre">Nuevo Nombre:</label>
+                        <input type="text" id="nuevoNombre" name="nuevoNombre" placeholder="xxxxxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo">Correo:</label>
+                        <input type="email" id="correo" name="correo" value="DiegoMendez@gmail.com" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="codigo">CODIGO:</label>
+                        <input type="text" id="codigo" name="codigo" placeholder="xxxxxxxxxxxxxx">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Enviar Correo</button>
+                </form>
+            </div>
+
+            <!-- Decorative elements -->
+            <div class="decorative-elements">
+                <svg class="decoration-1" width="120" height="120" viewBox="0 0 120 120" fill="none">
+                    <circle cx="60" cy="60" r="50" fill="#22c55e" opacity="0.8"/>
+                    <path d="M40 60 L55 75 L80 45" stroke="white" stroke-width="3" fill="none"/>
+                </svg>
+                <svg class="decoration-2" width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <circle cx="40" cy="40" r="30" fill="#16a34a" opacity="0.6"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar event listeners a los elementos clickeables
+            const clickableElements = document.querySelectorAll('.clickable-user');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Redirigir a la página de cambio de contraseña
+                    window.location.href = '/test-password/';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Dispensador de Llaves</title>
+        <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"> <!-- Añade un CSS si lo deseas -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Contenedor del sidebar -->
+                <div class="sidebar-container">
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-details">
+                            <div class="welcome">Bienvenido <span class="user-name">Diego Mendez</span></div>
+                            <div class="user-role">Su rol es: <span class="role">Administrador</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Separador después de user info -->
+                    <div class="separator"></div>
+
+                    <!-- Navigation Menu -->
+                    <nav class="nav-menu">
+                        <ul>
+                            <li class="active">
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                    Menu Principal
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Agregar Instru/Aseo/Vigilante
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Consultar Ambientes
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Consultar Programación
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="header">
+                    <h1>Dispensador de llaves</h1>
+                </div>
+
+                <div class="content">
+                    <h2>Panel de Administración</h2>
+                    <p>Este es el panel de administración para gestionar las llaves de los ambientes del xxxx. Aquí puedes administrar los registros de Ambientes, Configurar opciones y mas.</p>
+                </div>
+
+                <div class="bottom-decoration">
+                    <img src="img/keys.png" alt="Icono de llaves" class="bottom-key">
+                    <div class="green-circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

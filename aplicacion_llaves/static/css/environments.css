@@ -1,0 +1,323 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+.container-fluid {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    min-height: calc(100vh - 20px);
+}
+
+.dashboard {
+    background-color: white;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    box-shadow: none;
+    min-height: calc(100vh - 20px);
+    width: 100%;
+    border: none;
+}
+
+/* SIDEBAR STYLES - COPIADOS EXACTAMENTE DEL DASHBOARD */
+.sidebar {
+    width: 320px;
+    min-width: 320px;
+    background-color: #f0ebfa;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 0;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    color: #008f39;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.welcome {
+    font-size: 14px;
+    color: #008f39;
+    font-weight: 500;
+}
+
+.user-name {
+    font-weight: 600;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #333;
+}
+
+.role {
+    color: #008f39;
+    font-weight: 600;
+}
+
+.separator {
+    height: 1px;
+    background-color: #666;
+    margin: 15px 0;
+    width: 100%;
+    border: none;
+    opacity: 1;
+}
+
+.nav-menu ul {
+    list-style: none;
+}
+
+.nav-menu li {
+    margin-bottom: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.nav-menu li.active {
+    background-color: #e6e0f5;
+}
+
+.nav-menu a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.nav-menu a:hover {
+    background-color: #e6e0f5;
+}
+
+.nav-menu svg {
+    margin-right: 10px;
+    color: #333;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    padding-bottom: 150px;
+    min-width: 0;
+}
+
+/* Header más compacto */
+.header {
+    background-color: #008f39;
+    padding: 15px 40px;
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    border-radius: 50px;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.content {
+    padding: 0 20px;
+    flex: 1;
+}
+
+.content h2 {
+    color: #008f39;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+/* Estilos personalizados para Bootstrap */
+.custom-btn {
+    background-color: #008f39 !important;
+    border-color: transparent !important;
+    border-radius: 25px !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.custom-btn:hover {
+    background-color: #007a32 !important;
+    border-color: transparent !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 143, 57, 0.3) !important;
+}
+
+.custom-input {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 15px !important;
+    padding: 12px 15px !important;
+    transition: all 0.3s ease !important;
+    background-color: #f8f9fa !important;
+}
+
+.custom-input:focus {
+    border-color: transparent !important;
+    background-color: white !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 143, 57, 0.25) !important;
+}
+
+.custom-accordion-btn {
+    background-color: #f8f9fa !important;
+    border: none !important;
+    color: #008f39 !important;
+    font-weight: 600 !important;
+}
+
+.custom-accordion-btn:not(.collapsed) {
+    background-color: #008f39 !important;
+    color: white !important;
+}
+
+.custom-accordion-btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 143, 57, 0.25) !important;
+}
+
+/* Cards de ambientes */
+.environment-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.environment-card:hover {
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 143, 57, 0.2);
+}
+
+/* Modal personalizado */
+.modal-content {
+    border-radius: 20px !important;
+    border: none !important;
+}
+
+.modal-header {
+    border-radius: 20px 20px 0 0 !important;
+}
+
+.bottom-decoration {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.bottom-key {
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+}
+
+.green-circle {
+    width: 120px;
+    height: 120px;
+    background-color: #008f39;
+    border-radius: 50%;
+    position: absolute;
+    right: -40px;
+    bottom: -40px;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+        align-items: flex-start;
+    }
+
+    .container-fluid {
+        min-height: calc(100vh - 10px);
+    }
+
+    .dashboard {
+        flex-direction: column;
+        min-height: calc(100vh - 10px);
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .main-content {
+        padding: 20px;
+        padding-bottom: 120px;
+    }
+
+    .header {
+        padding: 12px 30px;
+        margin-bottom: 20px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .content h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .nav-menu a {
+        white-space: normal;
+    }
+
+    .bottom-decoration {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        justify-content: center;
+        margin-top: 20px;
+    }
+}
+
+/* Para pantallas muy grandes */
+@media (min-width: 1400px) {
+    .header h1 {
+        font-size: 30px;
+    }
+
+    .content h2 {
+        font-size: 32px;
+    }
+}

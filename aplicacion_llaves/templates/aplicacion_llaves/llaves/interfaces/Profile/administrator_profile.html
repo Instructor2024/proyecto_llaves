@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Administrador - Dispensador de Llaves</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Botón de retroceso -->
+                <div class="back-button">
+                    <a href="{% url 'dashboard' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m12 19-7-7 7-7"></path>
+                            <path d="m19 12-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Contenedor del sidebar -->
+                <div class="sidebar-container">
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-details">
+                            <div class="welcome">Bienvenido <span class="user-name clickable-user" data-action="change-password">{{ nickname }}</span></div>
+                            <div class="user-role">Correo: <span class="role clickable-user" data-action="change-password">{{ user_email }}</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Separador después de user info -->
+                    <div class="separator"></div>
+
+                    <!-- Navigation Menu -->
+                    <nav class="nav-menu">
+                        <ul>
+                            <li>
+                                <a href="{% url 'dashboard' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                    Menu Principal
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'profile_administrator' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Cambiar Nombre
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'change_password' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Cambiar Contraseña
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                    
+                    <!-- Botón de Salida -->
+                    <div class="separator"></div>
+                    <a href="{% url 'logout' %}" class="logout-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16,17 21,12 16,7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="header">
+                    <h1>Dispensador de llaves</h1>
+                </div>
+
+                <div class="content">
+                    <h2>Perfil de Administrador</h2>
+                    
+                    <!-- Campos básicos del perfil -->
+                    <div class="profile-fields">
+                        <div class="profile-field">
+                            <div class="field-label">Nombre Completo:</div>
+                            <div class="field-value">{{ nickname }}</div>
+                        </div>
+
+                        <div class="profile-field">
+                            <div class="field-label">Usuario:</div>
+                            <div class="field-value">{{ nickname }}</div>
+                        </div>
+
+                        <div class="profile-field">
+                            <div class="field-label">Correo:</div>
+                            <div class="field-value">{{ user_email }}</div>
+                        </div>
+
+                        <div class="profile-field">
+                            <div class="field-label">Tipo:</div>
+                            <div class="field-value">Super Administrador</div>
+                        </div>
+
+                        <div class="profile-field">
+                            <div class="field-label">Estado:</div>
+                            <div class="field-value">
+                                <span class="status-active">Activo</span>
+                            </div>
+                        </div>
+
+                        <!-- Botón Ver más -->
+                        <div class="show-more-container">
+                            <button class="show-more-btn" onclick="toggleMoreFields()">
+                                <span class="show-more-text">Ver más</span>
+                                <svg class="show-more-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Campos adicionales (ocultos inicialmente) -->
+                        <div class="additional-fields" id="additionalFields" style="display: none;">
+                            <div class="profile-field">
+                                <div class="field-label">Personal Autorizado:</div>
+                                <div class="field-value">
+                                    <span class="status-active">Sí</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="field-label">Fecha de Registro:</div>
+                                <div class="field-value">31 de Mayo, 2025</div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="field-label">Último Acceso:</div>
+                                <div class="field-value">No registrado</div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="field-label">Huella Dactilar:</div>
+                                <div class="field-value">
+                                    <span class="status-inactive">No configurada</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="field-label">Última Act. Huella:</div>
+                                <div class="field-value">No registrada</div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="field-label">Cuenta Bloqueada:</div>
+                                <div class="field-value">
+                                    <span class="status-active">No</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="field-label">Fecha de Creación:</div>
+                                <div class="field-value">31 de Mayo, 2025 - 14:39</div>
+                            </div>
+
+                            <div class="profile-field">
+                                <div class="field-label">Última Actualización:</div>
+                                <div class="field-value">31 de Mayo, 2025 - 14:39</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottom-decoration">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bottom-key">
+                        <path d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function toggleMoreFields() {
+            const additionalFields = document.getElementById('additionalFields');
+            const showMoreBtn = document.querySelector('.show-more-btn');
+            const showMoreText = document.querySelector('.show-more-text');
+            const showMoreArrow = document.querySelector('.show-more-arrow');
+            
+            if (additionalFields.style.display === 'none') {
+                additionalFields.style.display = 'block';
+                showMoreText.textContent = 'Ver menos';
+                showMoreArrow.style.transform = 'rotate(180deg)';
+            } else {
+                additionalFields.style.display = 'none';
+                showMoreText.textContent = 'Ver más';
+                showMoreArrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Agregar event listeners a los elementos clickeables
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickableElements = document.querySelectorAll('.clickable-user');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Redirigir a la página de cambio de contraseña
+                    window.location.href = '{% url "change_password" %}';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+    background-color: #f3f0fb;
+    height: 100vh;
+    padding: 1rem;
+    border-radius: 15px 0 0 15px;
+}
+
+.sidebar .menu-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    margin: 5px 0;
+    color: #000;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sidebar .menu-link:hover {
+    background-color: #d3cbe8;
+}
+
+.menu-icon {
+    margin-right: 8px;
+    color: #4e4e4e;
+}
+
+.header-bar {
+    background-color: #1c7c40;
+    color: white;
+    padding: 1rem;
+    border-radius: 15px;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.main-content {
+    padding: 2rem;
+}
+
+.accordion-button:not(.collapsed) {
+    color: #1c7c40;
+    background-color: #fafafa;
+    font-weight: bold;
+}
+
+.accordi {
+    background-color: #f3eefe;
+    border-radius: 10px;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.fa-user {
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 50%;
+    color: #1c1c1c;
+    margin-right: 10px;
+}
+
+.card-style {
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}

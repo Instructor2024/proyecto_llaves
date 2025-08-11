@@ -1,0 +1,751 @@
+/* Reset y configuración base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    font-family: "Arial", sans-serif;
+    overflow: hidden;
+}
+
+/* Contenedor principal que ocupa toda la pantalla */
+.fullscreen-container {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #0a1428 0%, #1e3a5f 50%, #0a1428 100%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+/* Elementos decorativos tecnológicos */
+.tech-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.tech-lines {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(64, 224, 208, 0.4), transparent);
+    height: 2px;
+    animation: glow 3s infinite ease-in-out;
+}
+
+.tech-line-1 {
+    width: 200px;
+    top: 15%;
+    left: 10%;
+    transform: rotate(45deg);
+    animation-delay: 0s;
+}
+
+.tech-line-2 {
+    width: 150px;
+    top: 25%;
+    right: 15%;
+    transform: rotate(-30deg);
+    animation-delay: 1s;
+}
+
+.tech-line-3 {
+    width: 180px;
+    bottom: 30%;
+    left: 8%;
+    transform: rotate(15deg);
+    animation-delay: 2s;
+}
+
+.tech-line-4 {
+    width: 120px;
+    bottom: 20%;
+    right: 12%;
+    transform: rotate(-45deg);
+    animation-delay: 0.5s;
+}
+
+.tech-line-5 {
+    width: 100px;
+    top: 60%;
+    left: 5%;
+    transform: rotate(75deg);
+    animation-delay: 1.5s;
+}
+
+.tech-line-6 {
+    width: 140px;
+    top: 40%;
+    right: 8%;
+    transform: rotate(-60deg);
+    animation-delay: 2.5s;
+}
+
+.tech-circles {
+    position: absolute;
+    border: 2px solid rgba(64, 224, 208, 0.3);
+    border-radius: 50%;
+    animation: pulse 4s infinite ease-in-out;
+}
+
+.tech-circle-1 {
+    width: 80px;
+    height: 80px;
+    top: 12%;
+    left: 3%;
+    animation-delay: 0s;
+}
+
+.tech-circle-2 {
+    width: 60px;
+    height: 60px;
+    top: 18%;
+    right: 5%;
+    animation-delay: 1s;
+}
+
+.tech-circle-3 {
+    width: 100px;
+    height: 100px;
+    bottom: 25%;
+    left: 2%;
+    animation-delay: 2s;
+}
+
+.tech-circle-4 {
+    width: 70px;
+    height: 70px;
+    bottom: 15%;
+    right: 4%;
+    animation-delay: 1.5s;
+}
+
+.tech-nodes {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: rgba(64, 224, 208, 0.6);
+    border-radius: 50%;
+    animation: blink 2s infinite ease-in-out;
+}
+
+.tech-node-1 {
+    top: 20%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.tech-node-2 {
+    top: 35%;
+    right: 20%;
+    animation-delay: 0.5s;
+}
+
+.tech-node-3 {
+    bottom: 40%;
+    left: 12%;
+    animation-delay: 1s;
+}
+
+.tech-node-4 {
+    bottom: 25%;
+    right: 18%;
+    animation-delay: 1.5s;
+}
+
+/* Animaciones */
+@keyframes glow {
+
+    0%,
+    100% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Área de contenido principal */
+.main-content-area {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    align-items: stretch;
+    z-index: 10;
+    position: relative;
+}
+
+/* Panel de confirmación principal */
+.confirmation-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 15px;
+    flex: 1;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: fit-content;
+    overflow: visible;
+    position: relative;
+}
+
+/* Sección del usuario */
+.user-section {
+    text-align: center;
+    margin-bottom: 15px;
+    position: relative;
+    padding: 15px;
+    background: linear-gradient(to bottom, rgba(44, 82, 130, 0.05), transparent);
+    border-radius: 12px;
+}
+
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #2c5282, #3182ce);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    box-shadow: 0 8px 16px rgba(44, 82, 130, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.user-avatar:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) rotate(45deg);
+    }
+}
+
+.user-avatar i {
+    font-size: 2rem;
+    color: white;
+}
+
+.user-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c5282;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.user-name:before,
+.user-name:after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #40e0d0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.user-name:before {
+    left: -5px;
+}
+
+.user-name:after {
+    right: -5px;
+}
+
+/* Badges de verificación */
+.verification-badges {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.badge-item {
+    background: linear-gradient(135deg, #40e0d0, #20b2aa);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.3);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.badge-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(64, 224, 208, 0.4);
+}
+
+.badge-item:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.badge-item i {
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.3);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sección de datos personales */
+.personal-data-section {
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(44, 82, 130, 0.1);
+}
+
+.personal-data-section h3 {
+    color: #2c5282;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(44, 82, 130, 0.1);
+    position: relative;
+}
+
+.personal-data-section h3:after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: #40e0d0;
+}
+
+.data-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(44, 82, 130, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid #40e0d0;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.data-row:hover {
+    background: rgba(44, 82, 130, 0.08);
+    transform: translateX(3px);
+}
+
+.data-row:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #40e0d0;
+    opacity: 0.6;
+}
+
+.data-row .label {
+    font-weight: bold;
+    color: #2c5282;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.data-row .label:before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #40e0d0;
+    border-radius: 50%;
+}
+
+.data-row .value {
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(44, 82, 130, 0.1);
+}
+
+/* Botón de confirmación - Más grande para tercera edad */
+.confirm-button-section {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #40e0d0, #20b2aa);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(64, 224, 208, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 180px;
+    min-height: 50px;
+}
+
+.confirm-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(64, 224, 208, 0.4);
+    background: linear-gradient(135deg, #20b2aa, #40e0d0);
+}
+
+.confirm-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(64, 224, 208, 0.3);
+}
+
+.reject-btn {
+    background: linear-gradient(135deg, #e53e3e, #c53030);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(229, 62, 62, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 180px;
+    min-height: 50px;
+}
+
+.reject-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(229, 62, 62, 0.4);
+    background: linear-gradient(135deg, #c53030, #e53e3e);
+}
+
+.reject-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(229, 62, 62, 0.3);
+}
+
+/* Tarjeta de tipo de personal */
+.personnel-type-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+/* Reloj digital en el panel lateral */
+.digital-clock {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 20;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(64, 224, 208, 0.2);
+    border: 2px solid rgba(64, 224, 208, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.clock-frame {
+    background: linear-gradient(135deg, #40e0d0, #20b2aa);
+    border-radius: 8px;
+    padding: 18px 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.clock-frame:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: clockScan 4s infinite;
+}
+
+@keyframes clockScan {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.clock-display {
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+#clock-time {
+    font-family: "Courier New", monospace;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+.clock-date {
+    text-align: center;
+}
+
+#clock-date {
+    font-family: "Courier New", monospace;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.clock-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding: 0 6px;
+}
+
+.control-dot {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.8));
+    border-radius: 50%;
+    animation: controlBlink 2s infinite alternate;
+    box-shadow: 0 2px 4px rgba(64, 224, 208, 0.3);
+}
+
+.control-dot:nth-child(2) {
+    animation-delay: 1s;
+}
+
+@keyframes controlBlink {
+    0% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.card-header {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #2c5282;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #e53e3e, #c53030);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    box-shadow: 0 6px 12px rgba(229, 62, 62, 0.3);
+}
+
+.card-icon i {
+    font-size: 1.8rem;
+    color: white;
+}
+
+.card-status {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #38a169;
+    margin-bottom: 8px;
+}
+
+.card-contract {
+    color: #718096;
+    font-size: 0.75rem;
+}
+
+/* Footer del sistema */
+.system-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 30px;
+    margin-top: 10px;
+    z-index: 10;
+    position: relative;
+}
+
+.footer-left,
+.footer-right {
+    color: rgba(64, 224, 208, 0.8);
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* Responsividad */
+@media (max-width: 1400px) {
+    .main-content-area {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .personnel-type-card {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .confirmation-panel {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .confirmation-panel {
+        padding: 15px;
+    }
+
+    .verification-badges {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .data-row {
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+    }
+
+    .buttons-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .confirm-btn,
+    .reject-btn {
+        padding: 15px 40px;
+        font-size: 1rem;
+        min-width: 200px;
+    }
+}

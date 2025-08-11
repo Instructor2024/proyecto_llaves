@@ -1,0 +1,382 @@
+/* Estilos específicos para la gestión de personal */
+
+/* Animaciones y transiciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Contenedor principal */
+.personnel-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Header mejorado */
+.page-header {
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+}
+
+/* Tarjetas de estadísticas con hover mejorado */
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s;
+}
+
+.stat-card:hover::before {
+    left: 100%;
+}
+
+.stat-card:hover {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* Iconos animados */
+.stat-icon {
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Botones mejorados */
+.btn-primary-custom, .btn-secondary-custom {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary-custom::before, .btn-secondary-custom::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.btn-primary-custom:hover::before, .btn-secondary-custom:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Tabla mejorada */
+.table-responsive {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.table tbody tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.table tbody tr:hover::before {
+    background: #008F39;
+}
+
+.table tbody tr:hover {
+    background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%);
+    transform: translateX(5px);
+}
+
+/* Badges de huella digital */
+.biometric-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.biometric-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.biometric-badge:hover::before {
+    left: 100%;
+}
+
+/* Botones de acción */
+.btn-action {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-action::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.btn-action:hover::before {
+    width: 100px;
+    height: 100px;
+}
+
+/* Modal mejorado */
+.modal {
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #008F39, #006b2e, #008F39);
+    animation: slideIn 0.5s ease-out;
+}
+
+/* Formularios mejorados */
+.form-control {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 143, 57, 0.15);
+}
+
+/* Input group mejorado */
+.input-group {
+    position: relative;
+}
+
+.input-group .btn {
+    position: relative;
+    z-index: 2;
+}
+
+/* Paginación mejorada */
+.pagination .page-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.pagination .page-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,143,57,0.1), transparent);
+    transition: left 0.3s;
+}
+
+.pagination .page-link:hover::before {
+    left: 100%;
+}
+
+/* Breadcrumb mejorado */
+.breadcrumb-nav {
+    position: relative;
+    overflow: hidden;
+}
+
+.breadcrumb-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #008F39, #006b2e, #008F39);
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #008F39;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-filters-container {
+        padding: 20px;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .btn-action {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .stat-card {
+        background: #2d3748;
+        color: white;
+    }
+    
+    .search-filters-container {
+        background: #2d3748;
+        color: white;
+    }
+    
+    .people-table-container {
+        background: #2d3748;
+        color: white;
+    }
+    
+    .table th {
+        background: #4a5568;
+        color: white;
+    }
+    
+    .table tbody tr:hover {
+        background: #4a5568;
+    }
+}
+
+/* Accessibility improvements */
+.btn:focus, .form-control:focus, .page-link:focus {
+    outline: 2px solid #008F39;
+    outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .btn-primary-custom {
+        border: 2px solid #000;
+    }
+    
+    .table th {
+        border-bottom: 2px solid #000;
+    }
+    
+    .table td {
+        border-bottom: 1px solid #000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+

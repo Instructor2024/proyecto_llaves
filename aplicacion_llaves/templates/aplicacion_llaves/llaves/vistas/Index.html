@@ -1,0 +1,962 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispensador de Llaves</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* FORZAR formato exacto del dashboard principal - NO MODIFICAR */
+        body, .container, .dashboard, .sidebar, .main-content {
+            /* Usar SOLO los estilos del dashboard.css */
+        }
+        
+        /* Eliminar cualquier estilo personalizado que pueda interferir */
+        .header, .content, .content h2, .content p {
+            /* Usar SOLO los estilos del dashboard.css */
+        }
+
+        /* Forzar colores correctos para el título y descripción */
+        .content h2[style*="color: #008F39"] {
+            color: #008F39 !important;
+            font-size: 24px !important;
+            font-weight: 600 !important;
+        }
+
+        .content p[style*="color: #008F39"] {
+            color: #008F39 !important;
+            font-size: 16px !important;
+            font-weight: 400 !important;
+        }
+
+        /* Asegurar colores correctos para la sección del usuario */
+        .welcome {
+            font-size: 14px;
+            color: #008F39 !important;
+            font-weight: 500;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #008F39 !important;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #333 !important;
+        }
+
+        .role {
+            color: #008F39 !important;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            color: #008F39 !important;
+        }
+
+        /* Transiciones mejoradas para los modales */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.5) rotate(-10deg);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+
+        /* Estilos específicos para el modal de instructor */
+        .instructor-modal {
+            max-width: 500px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .instructor-modal .modal-header {
+            background: #008F39;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 -30px 20px -30px;
+        }
+
+        .instructor-modal .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .instructor-modal .modal-header .close {
+            color: white;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .instructor-modal .modal-header .close:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .instructor-modal form {
+            padding: 0 0 30px 0;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-field label {
+            color: #008F39;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 14px;
+        }
+
+        .form-field .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-field .form-control:focus {
+            border-color: #008F39;
+            box-shadow: 0 0 0 0.2rem rgba(0, 143, 57, 0.25);
+            background-color: white;
+            outline: none;
+        }
+
+        .form-field select.form-control {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px 12px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-success {
+            background-color: #008F39;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #006b2e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 143, 57, 0.3);
+        }
+
+        .scan-btn {
+            background-color: #008F39;
+            color: white;
+        }
+        
+        /* Estilos para las tarjetas de opciones */
+        .general-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .option-text {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .add-btn {
+            background-color: #008F39;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 143, 57, 0.3);
+        }
+        
+        .add-btn:hover {
+            background-color: #006b2e;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 143, 57, 0.4);
+        }
+        
+        .add-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Estilos para el modal de escaneo de huella */
+        .scan-modal {
+            max-width: 400px;
+            padding: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .scan-header {
+            text-align: center;
+            padding: 25px 30px 20px 30px;
+            background: white;
+        }
+
+        .scan-header h2 {
+            color: #008F39;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .scan-instructions {
+            color: #333;
+            font-size: 14px;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .scan-content {
+            text-align: center;
+            padding: 20px 30px;
+            background: white;
+        }
+
+        .fingerprint-icon {
+            margin-bottom: 15px;
+        }
+
+        .fingerprint-icon svg {
+            color: #333;
+        }
+
+        .sensor-label {
+            color: #008F39;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .scan-actions {
+            text-align: center;
+            padding: 20px 30px 25px 30px;
+            background: white;
+        }
+
+        .scan-add-btn {
+            background-color: #008F39;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .scan-add-btn:hover {
+            background-color: #006b2e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 143, 57, 0.3);
+        }
+
+        .scan-add-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Estilos para los modales */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white !important;
+            margin: 0 auto !important;
+            padding: 20px !important;
+            border-radius: 15px !important;
+            width: 90% !important;
+            max-width: 500px !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+            z-index: 10000 !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Estilos para el modal de instructor */
+        .instructor-modal {
+            max-width: 500px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .instructor-modal .modal-header {
+            background: #008F39;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 -30px 20px -30px;
+        }
+
+        .instructor-modal .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #008F39;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #008F39;
+            box-shadow: 0 0 0 3px rgba(0, 143, 57, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-success {
+            background-color: #008F39;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #006b2e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 143, 57, 0.3);
+        }
+
+        .scan-btn {
+            background-color: #008F39 !important;
+            color: white !important;
+        }
+
+        .scan-btn:hover {
+            background-color: #006b2e !important;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Contenedor del sidebar -->
+                <div class="sidebar-container">
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-details">
+                            <div class="welcome">Bienvenido <span class="user-name clickable-user" data-action="change-password">{{ nickname }}</span></div>
+                            <div class="user-role">Correo: <span class="role clickable-user" data-action="change-password">{{ user_email }}</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Separador después de user info -->
+                    <div class="separator"></div>
+
+                    <!-- Navigation Menu -->
+                    <nav class="nav-menu">
+                        <ul>
+                            <li>
+                                <a href="{% url 'dashboard' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                    Menu Principal
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'vistas_index' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Agregar Instru/Aseo/Vigilante
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'environments' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Consultar Ambientes
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'vistas_fragme_14_15' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Consultar Programación
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+
+                        </ul>
+                    </nav>
+                    
+                    <!-- Botón de Salida -->
+                    <div class="separator"></div>
+                    <a href="{% url 'logout' %}" class="logout-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16,17 21,12 16,7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="header">
+                    <h1>Dispensador de llaves</h1>
+                </div>
+                <div class="content">
+                    <h2>Gestión de Personal</h2>
+                    <p>Administra el personal registrado en la base de datos SICEFA</p>
+                    
+                    <div style="text-align: center; margin: 40px 0;">
+                        <a href="{% url 'add_personnel' %}" class="btn btn-success" style="padding: 15px 30px; font-size: 18px; text-decoration: none; display: inline-block;">
+                            👥 Ver y Agregar Personal
+                        </a>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 30px;">
+                        <h3 style="color: #008F39; margin-bottom: 15px;">Funcionalidades Disponibles:</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 10px;">✅ <strong>Ver personal existente</strong> en la tabla people de SICEFA</li>
+                            <li style="margin-bottom: 10px;">✅ <strong>Agregar nuevo personal</strong> (Instructores, Aseo, Seguridad, Administrativo)</li>
+                            <li style="margin-bottom: 10px;">✅ <strong>Búsqueda y filtros</strong> por nombre, documento, email</li>
+                            <li style="margin-bottom: 10px;">✅ <strong>Registro de huellas digitales</strong> biométricas</li>
+                            <li style="margin-bottom: 10px;">✅ <strong>Estadísticas en tiempo real</strong> del personal registrado</li>
+                        </ul>
+                    </div>
+                    
+
+
+                </div>
+                <div class="bottom-decoration">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bottom-key">
+                        <path d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="instructorModal" class="modal">
+        <div class="modal-content instructor-modal">
+            <div class="modal-header">
+                <h2>Agregar Instructor</h2>
+                <span class="close" onclick="closeModal('instructorModal')">×</span>
+            </div>
+            <form id="instructorForm">
+                <div class="form-field">
+                    <label>Nombre:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el nombre" name="nombres" required>
+                </div>
+                <div class="form-field">
+                    <label>Apellido:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el apellido" name="apellidos" required>
+                </div>
+                <div class="form-field">
+                    <label>Correo:</label>
+                    <input type="email" class="form-control" placeholder="Ingrese el correo" name="correo">
+                </div>
+                <div class="form-field">
+                    <label>Tipo de Documento:</label>
+                    <select class="form-control" name="tipo_documento" required>
+                        <option value="" disabled selected>Seleccionar tipo</option>
+                        <option value="CC">CC</option>
+                        <option value="CE">CE</option>
+                        <option value="PASAPORTE">PASAPORTE</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label>Número de Documento:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el número" name="numero_documento" required>
+                </div>
+                <div class="form-field">
+                    <label>Huella Biométrica:</label>
+                    <input type="text" class="form-control" placeholder="Huella no registrada" name="datos_huella" readonly>
+                </div>
+                <input type="hidden" name="tipo_personal" value="INSTRUCTOR">
+                
+                <div class="button-container">
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                    <button type="button" class="btn btn-success scan-btn" onclick="openScanModal()">Escanear Huella</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="aseoModal" class="modal">
+        <div class="modal-content instructor-modal">
+            <div class="modal-header">
+                <h2>Agregar Personal de Aseo</h2>
+                <span class="close" onclick="closeModal('aseoModal')">×</span>
+            </div>
+            <form id="aseoForm">
+                <div class="form-field">
+                    <label>Nombre:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el nombre" name="nombres" required>
+                </div>
+                <div class="form-field">
+                    <label>Apellido:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el apellido" name="apellidos" required>
+                </div>
+                <div class="form-field">
+                    <label>Correo:</label>
+                    <input type="email" class="form-control" placeholder="Ingrese el correo" name="correo">
+                </div>
+                <div class="form-field">
+                    <label>Tipo de Documento:</label>
+                    <select class="form-control" name="tipo_documento" required>
+                        <option value="" disabled selected>Seleccionar tipo</option>
+                        <option value="CC">CC</option>
+                        <option value="CE">CE</option>
+                        <option value="PASAPORTE">PASAPORTE</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label>Número de Documento:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el número" name="numero_documento" required>
+                </div>
+                <div class="form-field">
+                    <label>Huella Biométrica:</label>
+                    <input type="text" class="form-control" placeholder="Huella no registrada" name="datos_huella" readonly>
+                </div>
+                <input type="hidden" name="tipo_personal" value="LIMPIEZA">
+                
+                <div class="button-container">
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                    <button type="button" class="btn btn-success scan-btn" onclick="openScanModal()">Escanear Huella</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="seguridadModal" class="modal">
+        <div class="modal-content instructor-modal">
+            <div class="modal-header">
+                <h2>Agregar Personal de Seguridad</h2>
+                <span class="close" onclick="closeModal('seguridadModal')">×</span>
+            </div>
+            <form id="seguridadForm">
+                <div class="form-field">
+                    <label>Nombre:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el nombre" name="nombres" required>
+                </div>
+                <div class="form-field">
+                    <label>Apellido:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el apellido" name="apellidos" required>
+                </div>
+                <div class="form-field">
+                    <label>Correo:</label>
+                    <input type="email" class="form-control" placeholder="Ingrese el correo" name="correo">
+                </div>
+                <div class="form-field">
+                    <label>Tipo de Documento:</label>
+                    <select class="form-control" name="tipo_documento" required>
+                        <option value="" disabled selected>Seleccionar tipo</option>
+                        <option value="CC">CC</option>
+                        <option value="CE">CE</option>
+                        <option value="PASAPORTE">PASAPORTE</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label>Número de Documento:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el número" name="numero_documento" required>
+                </div>
+                <div class="form-field">
+                    <label>Huella Biométrica:</label>
+                    <input type="text" class="form-control" placeholder="Huella no registrada" name="datos_huella" readonly>
+                </div>
+                <input type="hidden" name="tipo_personal" value="SEGURIDAD">
+                
+                <div class="button-container">
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                    <button type="button" class="btn btn-success scan-btn" onclick="openScanModal()">Escanear Huella</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="administrativoModal" class="modal">
+        <div class="modal-content instructor-modal">
+            <div class="modal-header">
+                <h2>Agregar Personal Administrativo</h2>
+                <span class="close" onclick="closeModal('administrativoModal')">×</span>
+            </div>
+            <form id="administrativoForm">
+                <div class="form-field">
+                    <label>Nombre:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el nombre" name="nombres" required>
+                </div>
+                <div class="form-field">
+                    <label>Apellido:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el apellido" name="apellidos" required>
+                </div>
+                <div class="form-field">
+                    <label>Correo:</label>
+                    <input type="email" class="form-control" placeholder="Ingrese el correo" name="correo">
+                </div>
+                <div class="form-field">
+                    <label>Tipo de Documento:</label>
+                    <select class="form-control" name="tipo_documento" required>
+                        <option value="" disabled selected>Seleccionar tipo</option>
+                        <option value="CC">CC</option>
+                        <option value="CE">CE</option>
+                        <option value="PASAPORTE">PASAPORTE</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label>Número de Documento:</label>
+                    <input type="text" class="form-control" placeholder="Ingrese el número" name="numero_documento" required>
+                </div>
+                <div class="form-field">
+                    <label>Huella Biométrica:</label>
+                    <input type="text" class="form-control" placeholder="Huella no registrada" name="datos_huella" readonly>
+                </div>
+                <input type="hidden" name="tipo_personal" value="ADMINISTRATIVO">
+                
+                <div class="button-container">
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                    <button type="button" class="btn btn-success scan-btn" onclick="openScanModal()">Escanear Huella</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Modal de Escaneo de Huella -->
+    <div id="scanModal" class="modal">
+        <div class="modal-content scan-modal">
+            <div class="scan-header">
+                <h2>Agregue Su Huella Digital</h2>
+                <p class="scan-instructions">Asegurese de que su dedo y la pantalla esten limpios</p>
+            </div>
+            <div class="scan-content">
+                <div class="fingerprint-icon">
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 8C13.1 8 14 8.9 14 10C14 11.1 13.1 12 12 12C10.9 12 10 11.1 10 10C10 8.9 10.9 8 12 8Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 14C13.1 14 14 14.9 14 16C14 17.1 13.1 18 12 18C10.9 18 10 17.1 10 16C10 14.9 10.9 14 12 14Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M8 10C9.1 10 10 10.9 10 12C10 13.1 9.1 14 8 14C6.9 14 6 13.1 6 12C6 10.9 6.9 10 8 10Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 10C17.1 10 18 10.9 18 12C18 13.1 17.1 14 16 14C14.9 14 14 13.1 14 12C14 10.9 14.9 10 16 10Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6C7.1 6 8 6.9 8 8C8 9.1 7.1 10 6 10C4.9 10 4 9.1 4 8C4 6.9 4.9 6 6 6Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M18 6C19.1 6 20 6.9 20 8C20 9.1 19.1 10 18 10C16.9 10 16 9.1 16 8C16 6.9 16.9 6 18 6Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 14C7.1 14 8 14.9 8 16C8 17.1 7.1 18 6 18C4.9 18 4 17.1 4 16C4 14.9 4.9 14 6 14Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M18 14C19.1 14 20 14.9 20 16C20 17.1 19.1 18 18 18C16.9 18 16 17.1 16 16C16 14.9 16.9 14 18 14Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="sensor-label">sensor de huella digital</div>
+            </div>
+            <div class="scan-actions">
+                <button type="button" class="btn btn-success scan-add-btn" onclick="addFingerprint()">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentModal = null;
+
+        function showGeneralOptions() {
+            document.getElementById('formSection').style.display = 'block';
+        }
+
+        function openModal(modalType) {
+            let modalId;
+            switch(modalType) {
+                case 'instructor':
+                    modalId = 'instructorModal';
+                    break;
+                case 'aseo':
+                    modalId = 'aseoModal';
+                    break;
+                case 'seguridad':
+                    modalId = 'seguridadModal';
+                    break;
+                case 'administrativo':
+                    modalId = 'administrativoModal';
+                    break;
+                default:
+                    alert('Tipo de modal no válido: ' + modalType);
+                    return;
+            }
+            
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+                modal.style.visibility = 'visible';
+                modal.style.opacity = '1';
+                currentModal = modalId;
+            } else {
+                alert('No se encontró el modal: ' + modalId);
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function openScanModal() {
+            const scanModal = document.getElementById('scanModal');
+            if (scanModal) {
+                scanModal.style.display = 'block';
+                scanModal.style.visibility = 'visible';
+                scanModal.style.opacity = '1';
+            } else {
+                alert('No se encontró el modal de escaneo');
+            }
+        }
+
+        function closeScanModal() {
+            document.getElementById('scanModal').style.display = 'none';
+        }
+
+
+
+        function addFingerprint() {
+            // Simular el proceso de escaneo de huella
+            alert('Huella digital agregada exitosamente');
+            
+            // Actualizar el campo de huella en el formulario activo
+            const activeModal = document.querySelector('.modal[style*="block"]');
+            if (activeModal && activeModal.id !== 'scanModal') {
+                const huellaInput = activeModal.querySelector('input[name="datos_huella"]');
+                if (huellaInput) {
+                    huellaInput.value = 'Huella registrada';
+                    huellaInput.style.color = '#008F39';
+                    huellaInput.style.fontWeight = 'bold';
+                }
+            }
+            
+            // Cerrar el modal de escaneo
+            closeScanModal();
+        }
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Registro exitoso');
+                const modalId = form.closest('.modal').id;
+                closeModal(modalId);
+            });
+        });
+
+        // Cerrar modales al hacer clic fuera de ellos
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Agregar event listeners a los elementos clickeables para cambio de contraseña
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickableElements = document.querySelectorAll('.clickable-user');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Navegación suave sin desplazamiento
+                    setTimeout(function() {
+                        window.location.href = '{% url "change_password" %}';
+                    }, 100);
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>

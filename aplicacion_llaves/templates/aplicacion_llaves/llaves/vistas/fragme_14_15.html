@@ -1,0 +1,743 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dispensador de llaves</title>
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Hacer toda la vista responsive */
+    body {
+      overflow-x: hidden !important;
+    }
+    
+    .container {
+      max-width: 100% !important;
+      padding: 0 !important;
+    }
+    
+    .dashboard {
+      min-height: 100vh !important;
+      display: flex !important;
+      flex-direction: row !important;
+    }
+    
+    .sidebar {
+      width: 280px !important;
+      min-width: 280px !important;
+      height: 100vh !important;
+      position: fixed !important;
+      left: 0 !important;
+      top: 0 !important;
+      overflow-y: auto !important;
+      z-index: 1000 !important;
+    }
+    
+    .main-content {
+      flex: 1 !important;
+      margin-left: 280px !important;
+      min-height: 100vh !important;
+      overflow-y: auto !important;
+      padding: 20px !important;
+    }
+    
+    /* Responsive para pantallas medianas */
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 250px !important;
+        min-width: 250px !important;
+      }
+      
+      .main-content {
+        margin-left: 250px !important;
+      }
+    }
+    
+    /* Responsive para tablets */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 220px !important;
+        min-width: 220px !important;
+      }
+      
+      .main-content {
+        margin-left: 220px !important;
+        padding: 15px !important;
+      }
+    }
+    
+    /* Responsive para móviles */
+    @media (max-width: 576px) {
+      .dashboard {
+        flex-direction: column !important;
+      }
+      
+      .sidebar {
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        min-height: auto !important;
+      }
+      
+      .main-content {
+        margin-left: 0 !important;
+        padding: 10px !important;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem !important;
+      }
+      
+      .content h2 {
+        font-size: 1.3rem !important;
+      }
+      
+      .content p {
+        font-size: 0.9rem !important;
+      }
+      
+      .card-title {
+        font-size: 1rem !important;
+      }
+      
+      .card-title h3 {
+        font-size: 1.5rem !important;
+      }
+    }
+    /* Estilos del acordeón */
+    .accordion-button {
+      color: #008F39 !important;
+      font-weight: 600;
+      border-radius: 15px !important;
+      margin-bottom: 10px !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+      border: none !important;
+      padding: 15px 20px !important;
+      background-color: white !important;
+      transition: all 0.3s ease !important;
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: #e6f3e6 !important;
+      color: #008F39 !important;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+    .accordion-button:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+    .accordion-item {
+      border: none !important;
+      background: transparent !important;
+      margin-bottom: 10px !important;
+    }
+    .accordion-body {
+      background-color: white !important;
+      border-radius: 0 0 15px 15px !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+      margin-top: -10px !important;
+      padding: 20px !important;
+    }
+    .btn-outline-primary {
+      color: #008F39 !important;
+      border-color: #008F39 !important;
+      border-radius: 10px !important;
+      padding: 10px 20px !important;
+      font-weight: 500 !important;
+      transition: all 0.3s ease !important;
+    }
+    .btn-outline-primary:hover {
+      background-color: #008F39 !important;
+      color: white !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 4px 8px rgba(0, 143, 57, 0.3) !important;
+    }
+    .btn-outline-success {
+      border-radius: 10px !important;
+      padding: 10px 20px !important;
+      font-weight: 500 !important;
+      transition: all 0.3s ease !important;
+    }
+    .btn-outline-success:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 4px 8px rgba(0, 143, 57, 0.3) !important;
+    }
+    /* Estilos para la llave azul */
+    .bottom-decoration {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    .bottom-key {
+      color: #3b82f6;
+    }
+    
+    /* Estilos adicionales para las tarjetas */
+    .card-style {
+      border-radius: 15px !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+      border: none !important;
+      margin-bottom: 20px !important;
+    }
+    
+    .card-header {
+      background-color: #f8f9fa !important;
+      border-bottom: 1px solid #dee2e6 !important;
+      border-radius: 15px 15px 0 0 !important;
+      padding: 15px 20px !important;
+    }
+    
+    .table {
+      margin-bottom: 0 !important;
+    }
+    
+    .table th {
+      border-top: none !important;
+      font-weight: 600 !important;
+      color: #008F39 !important;
+    }
+    
+    .badge {
+      font-size: 0.75em !important;
+      padding: 0.5em 0.75em !important;
+    }
+    
+    .alert {
+      border-radius: 10px !important;
+      border: none !important;
+    }
+    
+    /* Estilos para la paginación */
+    .pagination {
+      margin-bottom: 0 !important;
+    }
+    
+    .page-link {
+      color: #008F39 !important;
+      border-color: #dee2e6 !important;
+      border-radius: 8px !important;
+      margin: 0 2px !important;
+      padding: 8px 12px !important;
+      font-weight: 500 !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .page-link:hover {
+      background-color: #e6f3e6 !important;
+      color: #008F39 !important;
+      border-color: #008F39 !important;
+      transform: translateY(-1px) !important;
+    }
+    
+    .page-item.active .page-link {
+      background-color: #008F39 !important;
+      border-color: #008F39 !important;
+      color: white !important;
+    }
+    
+    .page-item.disabled .page-link {
+      color: #6c757d !important;
+      background-color: #f8f9fa !important;
+      border-color: #dee2e6 !important;
+    }
+    
+    /* Estilos para la tabla responsive */
+    .table-responsive {
+      border-radius: 10px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      width: 100% !important;
+      overflow-x: auto !important;
+      background: white !important;
+    }
+    
+    /* Hacer la tabla responsive */
+    .table {
+      min-width: 800px !important;
+      width: 100% !important;
+    }
+    
+    /* Ajustar columnas para mejor visualización */
+    .table th,
+    .table td {
+      white-space: nowrap !important;
+      padding: 12px 8px !important;
+      font-size: 0.9rem !important;
+    }
+    
+    /* Columnas específicas */
+    .table th:nth-child(1), .table td:nth-child(1) { /* ID */
+      min-width: 60px !important;
+      max-width: 80px !important;
+    }
+    
+    .table th:nth-child(2), .table td:nth-child(2) { /* ID Programa */
+      min-width: 120px !important;
+      max-width: 140px !important;
+    }
+    
+    .table th:nth-child(3), .table td:nth-child(3) { /* ID Ambiente */
+      min-width: 100px !important;
+      max-width: 120px !important;
+    }
+    
+    .table th:nth-child(4), .table td:nth-child(4) { /* Creado */
+      min-width: 120px !important;
+      max-width: 140px !important;
+    }
+    
+    .table th:nth-child(5), .table td:nth-child(5) { /* Actualizado */
+      min-width: 120px !important;
+      max-width: 140px !important;
+    }
+    
+    .table th:nth-child(6), .table td:nth-child(6) { /* Eliminado */
+      min-width: 100px !important;
+      max-width: 120px !important;
+    }
+    
+    .table th:nth-child(7), .table td:nth-child(7) { /* Estado */
+      min-width: 80px !important;
+      max-width: 100px !important;
+    }
+    
+    /* Responsive para pantallas pequeñas */
+    @media (max-width: 768px) {
+      .table th,
+      .table td {
+        font-size: 0.8rem !important;
+        padding: 8px 4px !important;
+      }
+      
+      .card-header {
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+      
+      .d-flex.align-items-center {
+        justify-content: center !important;
+      }
+      
+      .main-content {
+        padding: 10px !important;
+      }
+    }
+    
+    /* Responsive para pantallas muy pequeñas */
+    @media (max-width: 576px) {
+      .table th,
+      .table td {
+        font-size: 0.75rem !important;
+        padding: 6px 3px !important;
+      }
+      
+      .btn-sm {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+      }
+      
+      .card-body {
+        padding: 10px !important;
+      }
+      
+      .row {
+        margin: 0 !important;
+      }
+      
+      .col-md-4 {
+        margin-bottom: 15px !important;
+      }
+    }
+    
+    .table-responsive::-webkit-scrollbar {
+      width: 8px !important;
+    }
+    
+    .table-responsive::-webkit-scrollbar-track {
+      background: #f1f1f1 !important;
+      border-radius: 4px !important;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+      background: #008F39 !important;
+      border-radius: 4px !important;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+      background: #006b2a !important;
+    }
+    
+    /* Mantener el encabezado fijo */
+    .table thead th {
+      position: sticky !important;
+      top: 0 !important;
+      background-color: #d1e7dd !important;
+      z-index: 10 !important;
+      border-bottom: 2px solid #008F39 !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="dashboard">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Contenedor del sidebar -->
+        <div class="sidebar-container">
+          <!-- User Info -->
+          <div class="user-info">
+            <div class="user-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="user-details">
+              <div class="welcome">Bienvenido <span class="user-name clickable-user" data-action="change-password">{{ nickname }}</span></div>
+              <div class="user-role">Correo: <span class="role clickable-user" data-action="change-password">{{ user_email }}</span></div>
+            </div>
+          </div>
+
+          <!-- Separador después de user info -->
+          <div class="separator"></div>
+
+          <!-- Navigation Menu -->
+          <nav class="nav-menu">
+            <ul>
+              <li>
+                <a href="{% url 'dashboard' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                  Menu Principal
+                </a>
+                <div class="separator"></div>
+              </li>
+              <li>
+                <a href="{% url 'vistas_index' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="9 18 15 12 9 6"></polygon>
+                  </svg>
+                  Agregar Instru/Aseo/Vigilante
+                </a>
+                <div class="separator"></div>
+              </li>
+                                          <li>
+                                <a href="{% url 'environments' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Consultar Ambientes
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+              <li class="active">
+                <a href="{% url 'vistas_fragme_14_15' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="9 18 15 12 9 6"></polygon>
+                  </svg>
+                  Consultar Programación
+                </a>
+                <div class="separator"></div>
+              </li>
+
+            </ul>
+          </nav>
+          
+          <!-- Botón de Salida -->
+          <div class="separator"></div>
+          <a href="{% url 'logout' %}" class="logout-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16,17 21,12 16,7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Cerrar Sesión
+          </a>
+        </div>
+      </div>
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="header">
+          <h1>Dispensador de llaves</h1>
+        </div>
+        <div class="content">
+          <h2 style="color: #008F39;">Panel de Administración</h2>
+          <p style="color: #008F39;">Consulta de Programación de Instructores por Ambiente</p>
+          
+          {% if error %}
+            <div class="alert alert-danger" role="alert">
+              <i class="fas fa-exclamation-triangle"></i> Error al cargar los datos: {{ error }}
+            </div>
+          {% endif %}
+          
+          <!-- Estadísticas -->
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="card card-style text-center">
+                <div class="card-body">
+                  <h5 class="card-title text-success">
+                    <i class="fas fa-list"></i> Total Programas
+                  </h5>
+                  <h3 class="text-success">{{ total_programs }}</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card card-style text-center">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">
+                    <i class="fas fa-check-circle"></i> Activos
+                  </h5>
+                  <h3 class="text-primary">{{ active_programs }}</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card card-style text-center">
+                <div class="card-body">
+                  <h5 class="card-title text-warning">
+                    <i class="fas fa-trash"></i> Eliminados
+                  </h5>
+                  <h3 class="text-warning">{{ deleted_programs }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Tabla de datos -->
+          <div class="card card-style">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="fas fa-table"></i> Registros de environment_instructor_programs
+              </h5>
+              <div class="d-flex align-items-center">
+                <button class="btn btn-outline-primary btn-sm me-2" onclick="scrollToEnd()" title="Ver todas las columnas">
+                  <i class="fas fa-arrows-alt-h"></i>
+                </button>
+                <label class="me-2 text-muted">Registros por página:</label>
+                <select class="form-select form-select-sm" style="width: auto;" onchange="changePageSize(this.value)">
+                  <option value="25" {% if page_size == 25 %}selected{% endif %}>25</option>
+                  <option value="50" {% if page_size == 50 %}selected{% endif %}>50</option>
+                  <option value="100" {% if page_size == 100 %}selected{% endif %}>100</option>
+                  <option value="200" {% if page_size == 200 %}selected{% endif %}>200</option>
+                </select>
+              </div>
+            </div>
+                          <div class="card-body">
+                {% if programs %}
+                  <div class="table-responsive" style="max-height: none; overflow-y: visible;">
+                    <div class="text-center mb-2">
+                      <small class="text-muted">
+                        <i class="fas fa-info-circle"></i> Tabla completa con scroll desde arriba
+                      </small>
+                      <br>
+                      <small class="text-muted">
+                        <i class="fas fa-arrows-alt-h"></i> Desplázate horizontalmente para ver todas las columnas
+                      </small>
+                    </div>
+                    <table class="table table-striped table-hover table-responsive">
+                    <thead class="table-success">
+                      <tr>
+                        <th><i class="fas fa-hashtag"></i> ID</th>
+                        <th><i class="fas fa-user-graduate"></i> ID Programa Instructor</th>
+                        <th><i class="fas fa-building"></i> ID Ambiente</th>
+                        <th><i class="fas fa-calendar-plus"></i> Creado</th>
+                        <th><i class="fas fa-calendar-check"></i> Actualizado</th>
+                        <th><i class="fas fa-calendar-times"></i> Eliminado</th>
+                        <th><i class="fas fa-info-circle"></i> Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for program in programs %}
+                        <tr>
+                          <td><strong>{{ program.id }}</strong></td>
+                          <td>{{ program.instructor_program_id }}</td>
+                          <td>{{ program.environment_id }}</td>
+                          <td>
+                            {% if program.created_at %}
+                              {{ program.created_at|date:"d/m/Y H:i" }}
+                            {% else %}
+                              <span class="text-muted">No disponible</span>
+                            {% endif %}
+                          </td>
+                          <td>
+                            {% if program.updated_at %}
+                              {{ program.updated_at|date:"d/m/Y H:i" }}
+                            {% else %}
+                              <span class="text-muted">No disponible</span>
+                            {% endif %}
+                          </td>
+                          <td>
+                            {% if program.deleted_at %}
+                              {{ program.deleted_at|date:"d/m/Y H:i" }}
+                            {% else %}
+                              <span class="text-muted">No eliminado</span>
+                            {% endif %}
+                          </td>
+                          <td>
+                            {% if program.deleted_at %}
+                              <span class="badge bg-danger">
+                                <i class="fas fa-trash"></i> Eliminado
+                              </span>
+                            {% else %}
+                              <span class="badge bg-success">
+                                <i class="fas fa-check"></i> Activo
+                              </span>
+                            {% endif %}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- Paginación -->
+                {% if page_obj.has_other_pages %}
+                  <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Navegación de páginas">
+                      <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                          <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="Primera">
+                              <i class="fas fa-angle-double-left"></i>
+                            </a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                              <i class="fas fa-angle-left"></i>
+                            </a>
+                          </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                          {% if page_obj.number == num %}
+                            <li class="page-item active">
+                              <span class="page-link">{{ num }}</span>
+                            </li>
+                          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                          {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                          <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Siguiente">
+                              <i class="fas fa-angle-right"></i>
+                            </a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Última">
+                              <i class="fas fa-angle-double-right"></i>
+                            </a>
+                          </li>
+                        {% endif %}
+                      </ul>
+                    </nav>
+                  </div>
+                  
+                  <!-- Información de paginación -->
+                  <div class="text-center mt-3">
+                    <small class="text-muted">
+                      Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }} de {{ page_obj.paginator.count }} registros
+                      (Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }})
+                    </small>
+                  </div>
+                {% endif %}
+              {% else %}
+                <div class="text-center py-4">
+                  <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                  <h5 class="text-muted">No hay registros disponibles</h5>
+                  <p class="text-muted">La tabla environment_instructor_programs está vacía o no se pudo acceder a los datos.</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+        <div class="bottom-decoration">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bottom-key">
+            <path d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/scripts.js' %}"></script>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Agregar event listeners a los elementos clickeables
+          const clickableElements = document.querySelectorAll('.clickable-user');
+          
+          clickableElements.forEach(element => {
+              element.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  
+                  // Navegación suave sin desplazamiento
+                  setTimeout(function() {
+                      window.location.href = '{% url "change_password" %}';
+                  }, 100);
+              });
+          });
+      });
+      
+      // Función para cambiar el tamaño de página
+      function changePageSize(size) {
+          const urlParams = new URLSearchParams(window.location.search);
+          urlParams.set('page_size', size);
+          urlParams.delete('page'); // Reset a la primera página
+          window.location.href = window.location.pathname + '?' + urlParams.toString();
+      }
+      
+      // Función para hacer scroll horizontal al final
+      function scrollToEnd() {
+          const tableContainer = document.querySelector('.table-responsive');
+          if (tableContainer) {
+              tableContainer.scrollLeft = tableContainer.scrollWidth;
+          }
+      }
+      
+      // Función para hacer scroll al inicio de la página
+      function scrollToTop() {
+          window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+          });
+      }
+      
+      // Agregar botón de scroll to top cuando sea necesario
+      document.addEventListener('DOMContentLoaded', function() {
+          // Agregar botón de scroll to top si la página es larga
+          if (document.body.scrollHeight > window.innerHeight) {
+              const scrollButton = document.createElement('button');
+              scrollButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+              scrollButton.className = 'btn btn-success position-fixed';
+              scrollButton.style.cssText = 'bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 50px; height: 50px; display: none;';
+              scrollButton.onclick = scrollToTop;
+              document.body.appendChild(scrollButton);
+              
+              // Mostrar/ocultar botón según scroll
+              window.addEventListener('scroll', function() {
+                  if (window.pageYOffset > 300) {
+                      scrollButton.style.display = 'block';
+                  } else {
+                      scrollButton.style.display = 'none';
+                  }
+              });
+          }
+      });
+  </script>
+</body>
+</html>

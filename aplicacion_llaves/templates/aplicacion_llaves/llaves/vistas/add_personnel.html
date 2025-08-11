@@ -1,0 +1,1010 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Personal - Dispensador de Llaves</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        /* Scroll general */
+        html, body { height: 100%; overflow-y: auto; scroll-behavior: smooth; }
+        .container { min-height: 100vh; overflow-y: auto; }
+        .dashboard { min-height: 100vh; display: flex; }
+        .main-content { flex: 1; overflow-y: auto; padding: 20px; max-height: 100vh; }
+        .content { padding-bottom: 50px; }
+
+        /* Cards */
+        .stats-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .stat-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; transition: transform .3s, box-shadow .3s; border: 1px solid #e0e0e0; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .stat-icon { font-size: 2.5rem; margin-bottom: 15px; color: #008F39; }
+        .stat-number { font-size: 2.5rem; font-weight: 700; color: #008F39; margin-bottom: 10px; }
+        .stat-label { color: #666; font-size: 1rem; font-weight: 500; }
+
+        /* Tabla */
+        .table-section { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 30px; }
+        .table-header { background: linear-gradient(135deg, #008F39 0%, #006b2e 100%); color: white; padding: 25px 30px; display:flex; justify-content:space-between; align-items:center; }
+        .table-title { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .table-actions { display:flex; gap:15px; }
+        .btn-add-personnel { background: rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.3); color:white; border-radius:12px; padding:12px 25px; font-weight:600; transition:.3s; text-decoration:none; }
+        .btn-add-personnel:hover { background: rgba(255,255,255,.3); border-color: rgba(255,255,255,.5); color:white; transform: translateY(-2px); text-decoration:none; }
+        .table-responsive { max-height: 600px; overflow-y: auto; }
+        .table { margin-bottom: 0; }
+        .table th { background:#f8f9fa; border:none; padding:18px 20px; font-weight:600; color:#333; font-size:.95rem; position:sticky; top:0; z-index:10; }
+        .table td { border:none; padding:18px 20px; vertical-align: middle; border-bottom:1px solid #f0f0f0; }
+        .table tbody tr:hover { background:#f8f9fa; transform: scale(1.01); transition:.2s; }
+        .person-name { font-weight:600; color:#333; }
+        .person-document { color:#666; font-size:.9rem; }
+        .person-email { color:#008F39; font-size:.9rem; }
+        .biometric-badge { padding:6px 12px; border-radius:20px; font-size:.8rem; font-weight:600; text-transform:uppercase; }
+        .biometric-yes { background:linear-gradient(135deg,#d4edda 0%,#c3e6cb 100%); color:#155724; border:1px solid #c3e6cb; }
+        .biometric-no { background:linear-gradient(135deg,#f8d7da 0%,#f5c6cb 100%); color:#721c24; border:1px solid #f5c6cb; }
+        .action-buttons { display:flex; gap:8px; }
+        .btn-action { padding:8px 12px; border-radius:8px; border:none; font-size:.85rem; font-weight:500; transition:.3s; cursor:pointer; }
+        .btn-edit { background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%); color:#212529; }
+        .btn-edit:hover { background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%); transform: translateY(-1px); }
+        .btn-delete { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color:white; }
+        .btn-delete:hover { background: linear-gradient(135deg, #c82333 0%, #bd2130 100%); transform: translateY(-1px); }
+        .pagination-container { background:white; padding:25px 30px; border-top:1px solid #f0f0f0; }
+        .pagination { margin:0; }
+        .page-link { border:none; color:#008F39; padding:12px 18px; margin:0 5px; border-radius:10px; font-weight:500; transition:.3s; }
+        .page-link:hover { background:#e8f5e8; color:#006b2e; transform: translateY(-2px); }
+        .page-item.active .page-link { background: linear-gradient(135deg, #008F39 0%, #006b2e 100%); color:white; box-shadow:0 4px 15px rgba(0,143,57,.3); }
+
+        /* Búsqueda */
+        .search-filter-section { background:white; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1); padding:25px 30px; margin-bottom:30px; }
+        .search-filter-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .search-filter-title { font-size:1.3rem; font-weight:600; color:#333; margin:0; }
+        .search-filter-form { display:grid; grid-template-columns: 1fr 1fr auto; gap:20px; align-items:end; }
+        .form-group { margin-bottom:0; }
+        .form-label { font-weight:600; color:#555; margin-bottom:8px; }
+        .form-control, .form-select { border:2px solid #e0e0e0; border-radius:12px; padding:12px 15px; font-size:.95rem; transition:.3s; }
+        .form-control:focus, .form-select:focus { border-color:#008F39; box-shadow:0 0 0 .2rem rgba(0,143,57,.25); }
+        .btn-search { background: linear-gradient(135deg, #008F39 0%, #006b2e 100%); border:none; color:white; border-radius:12px; padding:12px 25px; font-weight:600; transition:.3s; }
+        .btn-search:hover { transform: translateY(-2px); box-shadow:0 8px 25px rgba(0,143,57,.3); color:white; }
+        .btn-clear { background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); border:none; color:white; border-radius:12px; padding:12px 20px; font-weight:600; transition:.3s; }
+        .btn-clear:hover { transform: translateY(-2px); box-shadow:0 8px 25px rgba(108,117,125,.3); color:white; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-section { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; }
+            .action-buttons { flex-direction:column; gap:5px; }
+            .search-filter-form { grid-template-columns: 1fr; gap:15px; }
+        }
+    </style>
+</head>
+<body>
+    {% csrf_token %}
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-container">
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-details">
+                            <div class="welcome">Bienvenido <span class="user-name clickable-user" data-action="change-password">{{ nickname }}</span></div>
+                            <div class="user-role">Correo: <span class="role clickable-user" data-action="change-password">{{ user_email }}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="separator"></div>
+
+                    <!-- Navigation Menu -->
+                    <nav class="nav-menu">
+                        <ul>
+                            <li>
+                                <a href="{% url 'dashboard' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                    Menu Principal
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li class="active">
+                                <a href="{% url 'vistas_index' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Agregar Instru/Aseo/Vigilante
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'environments' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Consultar Ambientes
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                            <li>
+                                <a href="{% url 'vistas_fragme_14_15' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="9 18 15 12 9 6"></polygon>
+                                    </svg>
+                                    Consultar Programación
+                                </a>
+                                <div class="separator"></div>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="separator"></div>
+                    <a href="{% url 'logout' %}" class="logout-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16,17 21,12 16,7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="header">
+                    <h1>Dispensador de llaves</h1>
+                </div>
+
+                <div class="content">
+                    <h2>Panel de Administración</h2>
+                    <p>Este es el panel de administración para gestionar el personal del sistema. Aquí puedes administrar los registros de Personal, Configurar opciones y más.</p>
+
+                    <!-- Statistics Section -->
+                    <div class="stats-section">
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-number">{{ total_people|default:"146515" }}</div>
+                            <div class="stat-label">Total de Personal</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-number">{{ active_people|default:"146514" }}</div>
+                            <div class="stat-label">Personal Activo</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔐</div>
+                            <div class="stat-number">{{ with_biometric|default:"0" }}</div>
+                            <div class="stat-label">Con Huella Digital</div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filter Section -->
+                    <div class="search-filter-section">
+                        <div class="search-filter-header">
+                            <h3 class="search-filter-title">
+                                <i class="fas fa-search"></i> Búsqueda y Filtros
+                            </h3>
+                        </div>
+                        <form method="GET" class="search-filter-form">
+                            <div class="form-group">
+                                <label for="search" class="form-label">Buscar Personal</label>
+                                <input type="text" class="form-control" id="search" name="search"
+                                       value="{{ search_query }}" placeholder="Nombre, documento, email...">
+                            </div>
+                            <div class="form-group">
+                                <label for="filter_type" class="form-label">Filtrar por</label>
+                                <select class="form-select" id="filter_type" name="filter_type">
+                                    <option value="">Todos los registros</option>
+                                    <option value="active" {% if filter_type == 'active' %}selected{% endif %}>Personal Activo</option>
+                                    <option value="deleted" {% if filter_type == 'deleted' %}selected{% endif %}>Personal Eliminado</option>
+                                    <option value="with_biometric" {% if filter_type == 'with_biometric' %}selected{% endif %}>Con Huella Digital</option>
+                                    <option value="without_biometric" {% if filter_type == 'without_biometric' %}selected{% endif %}>Sin Huella Digital</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-search">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                                <a href="{% url 'add_personnel' %}" class="btn btn-clear ms-2">
+                                    <i class="fas fa-times"></i> Limpiar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Table Section -->
+                    <div class="table-section">
+                        <div class="table-header">
+                            <h3 class="table-title">
+                                <i class="fas fa-users"></i>
+                                Personal Registrado ({{ page_obj.paginator.count }} registros)
+                            </h3>
+                            <div class="table-actions">
+                                <button type="button" class="btn-add-personnel" onclick="showAddPersonModal()">
+                                    <i class="fas fa-plus"></i> Agregar Personal
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre Completo</th>
+                                        <th>Tipo Documento</th>
+                                        <th>Número Documento</th>
+                                        <th>Email</th>
+                                        <th>Huella Digital</th>
+                                        <th>Fecha Registro</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for person in people %}
+                                    <tr>
+                                        <td><strong>{{ person.id }}</strong></td>
+                                        <td>
+                                            <div class="person-name">
+                                                {{ person.first_name }} {{ person.first_last_name }}
+                                            </div>
+                                            {% if person.second_last_name %}
+                                                <div class="person-document">{{ person.second_last_name }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ person.document_type|default:"-" }}</td>
+                                        <td class="person-document">{{ person.document_number }}</td>
+                                        <td>
+                                            {% if person.personal_email %}
+                                                <div class="person-email">{{ person.personal_email }}</div>
+                                            {% elif person.misena_email %}
+                                                <div class="person-email">{{ person.misena_email }}</div>
+                                            {% elif person.sena_email %}
+                                                <div class="person-email">{{ person.sena_email }}</div>
+                                            {% else %}
+                                                <span class="text-muted">-</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if person.biometric_code and person.biometric_code != '' %}
+                                                <span class="biometric-badge biometric-yes">
+                                                    <i class="fas fa-check"></i> Sí
+                                                </span>
+                                            {% else %}
+                                                <span class="biometric-badge biometric-no">
+                                                    <i class="fas fa-times"></i> No
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ person.created_at|date:"d/m/Y H:i" }}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn-action btn-edit" onclick="editPerson({{ person.id }})">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </button>
+                                                <button class="btn-action btn-delete" onclick="deletePerson({{ person.id }})">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center py-5">
+                                            <i class="fas fa-users" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+                                            <div style="font-size: 1.2rem; color: #666;">No se encontraron registros de personal</div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if page_obj.has_other_pages %}
+                    <div class="pagination-container">
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&filter_type={{ filter_type }}{% endif %}">
+                                            <i class="fas fa-angle-double-left"></i> Primera
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&filter_type={{ filter_type }}{% endif %}">
+                                            <i class="fas fa-angle-left"></i> Anterior
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&filter_type={{ filter_type }}{% endif %}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&filter_type={{ filter_type }}{% endif %}">
+                                            Siguiente <i class="fas fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&filter_type={{ filter_type }}{% endif %}">
+                                            Última <i class="fas fa-angle-double-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // CSRF cookie helper (arreglado: incluye espacio tras ';')
+        function getCookie(name){
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Mostrar modal de agregar personal
+        function showAddPersonModal() {
+            const modalHtml = `
+                <div class="modal fade" id="addPersonModal" tabindex="-1" aria-labelledby="addPersonModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content" style="border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #008F39 0%, #006b2e 100%); color: white; border-radius: 20px 20px 0 0; padding: 25px 30px;">
+                                <h5 class="modal-title" id="addPersonModalLabel" style="font-size: 1.4rem; font-weight: 600;">
+                                    <i class="fas fa-user-plus me-2"></i> Registro de Nuevo Personal
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 30px;">
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="alert alert-info" style="border-radius: 15px; border: none; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <strong>Información:</strong> Complete todos los campos marcados con (*) para proceder con el registro.
+                                        </div>
+                                    </div>
+                                </div>
+                                <form id="addPersonForm">
+                                    <!-- Campo oculto para huella en base64 -->
+                                    <input type="hidden" id="huella_b64" name="huella_b64">
+
+                                    <!-- Información Personal -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 style="color: #008F39; font-weight: 600; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 20px;">
+                                                <i class="fas fa-user me-2"></i> Información Personal
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="nombres" class="form-label fw-bold">
+                                                <i class="fas fa-user me-1"></i> Nombres *
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg" id="nombres" name="nombres"
+                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="apellidos" class="form-label fw-bold">
+                                                <i class="fas fa-user me-1"></i> Apellidos *
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg" id="apellidos" name="apellidos"
+                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Documento -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 style="color: #008F39; font-weight: 600; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 20px;">
+                                                <i class="fas fa-id-card me-2"></i> Documento de Identidad
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="tipo_documento" class="form-label fw-bold">
+                                                <i class="fas fa-file-alt me-1"></i> Tipo de Documento *
+                                            </label>
+                                            <select class="form-select form-select-lg" id="tipo_documento" name="tipo_documento"
+                                                    style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                                <option value="">Seleccione tipo de documento</option>
+                                                <option value="Cédula de ciudadanía">Cédula de ciudadanía</option>
+                                                <option value="Tarjeta de identidad">Tarjeta de identidad</option>
+                                                <option value="Cédula de extranjería">Cédula de extranjería</option>
+                                                <option value="Pasaporte">Pasaporte</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="numero_documento" class="form-label fw-bold">
+                                                <i class="fas fa-hashtag me-1"></i> Número de Documento *
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg" id="numero_documento" name="numero_documento"
+                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contacto -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 style="color: #008F39; font-weight: 600; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 20px;">
+                                                <i class="fas fa-address-book me-2"></i> Información de Contacto
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="correo" class="form-label fw-bold">
+                                                <i class="fas fa-envelope me-1"></i> Correo Electrónico
+                                            </label>
+                                            <input type="email" class="form-control form-control-lg" id="correo" name="correo"
+                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="telefono" class="form-label fw-bold">
+                                                <i class="fas fa-phone me-1"></i> Teléfono
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg" id="telefono" name="telefono"
+                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Adicional -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 style="color: #008F39; font-weight: 600; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 20px;">
+                                                <i class="fas fa-info-circle me-2"></i> Información Adicional
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="fecha_nacimiento" class="form-label fw-bold">
+                                                <i class="fas fa-calendar me-1"></i> Fecha de Nacimiento
+                                            </label>
+                                            <input type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento"
+                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="genero" class="form-label fw-bold">
+                                                <i class="fas fa-venus-mars me-1"></i> Género
+                                            </label>
+                                            <select class="form-select form-select-lg" id="genero" name="genero"
+                                                    style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                                <option value="">Seleccione género</option>
+                                                <option value="Masculino">Masculino</option>
+                                                <option value="Femenino">Femenino</option>
+                                                <option value="No registra">No registra</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="direccion" class="form-label fw-bold">
+                                                <i class="fas fa-map-marker-alt me-1"></i> Dirección
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg" id="direccion" name="direccion"
+                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="eps_id" class="form-label fw-bold">
+                                                <i class="fas fa-heartbeat me-1"></i> EPS
+                                            </label>
+                                            <select class="form-select form-select-lg" id="eps_id" name="eps_id"
+                                                    style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                                <option value="1">EPS por defecto</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Biometría -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h6 style="color: #008F39; font-weight: 600; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 20px;">
+                                                <i class="fas fa-fingerprint me-2"></i> Biometría
+                                            </h6>
+                                        </div>
+                                        <div class="col-md-8 mb-3">
+                                            <label for="biometric_code" class="form-label fw-bold">
+                                                <i class="fas fa-fingerprint me-1"></i> Código de Huella Digital
+                                            </label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-lg" id="biometric_code" name="biometric_code"
+                                                       placeholder="Código de huella digital" readonly
+                                                       style="border-radius: 12px 0 0 12px; border: 2px solid #e0e0e0;">
+                                                <button type="button" class="btn btn-primary btn-lg" onclick="captureFingerprint(this)"
+                                                        style="border-radius: 0 12px 12px 0; background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); border: none;">
+                                                    <i class="fas fa-fingerprint me-2"></i> Capturar Huella
+                                                </button>
+                                            </div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Conecte el lector AS608 y haga clic en "Capturar Huella"
+                                            </small>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="d-flex align-items-center h-100">
+                                                <div class="fingerprint-status" id="fingerprintStatus" style="display: none;">
+                                                    <span class="badge bg-success" style="font-size: 0.9rem;">
+                                                        <i class="fas fa-check me-1"></i> Huella capturada
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer" style="border-top: 2px solid #e0e0e0; padding: 25px 30px;">
+                                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal"
+                                        style="border-radius: 12px; padding: 12px 25px;">
+                                    <i class="fas fa-times me-2"></i> Cancelar
+                                </button>
+                                <button type="button" class="btn btn-success btn-lg" onclick="saveNewPerson()"
+                                        style="border-radius: 12px; padding: 12px 25px; background: linear-gradient(135deg, #008F39 0%, #006b2e 100%); border: none;">
+                                    <i class="fas fa-save me-2"></i> Guardar Personal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remover modal anterior si existe
+            const existingModal = document.getElementById('addPersonModal');
+            if (existingModal) existingModal.remove();
+
+            // Agregar modal al body y mostrar
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            const modal = new bootstrap.Modal(document.getElementById('addPersonModal'));
+            modal.show();
+        }
+
+        // Captura huella usando endpoint Django; guarda base64 en hidden
+async function captureFingerprint(btn) {
+  // 1) Scope: busca todo dentro de la modal actual
+  const modal = btn.closest('.modal') || document;
+
+  // Helper para asegurar un hidden dentro del <form>
+  const ensureHidden = (id) => {
+    let el = modal.querySelector('#' + id);
+    if (!el) {
+      const form = modal.querySelector('form') || modal;
+      el = document.createElement('input');
+      el.type = 'hidden';
+      el.id = id;
+      el.name = id;
+      form.appendChild(el);
+    }
+    return el;
+  };
+
+  const status    = modal.querySelector('#fingerprintStatus'); // puede no existir
+  const codeInput = modal.querySelector('#biometric_code');    // puede no existir
+  const hiddenTpl = ensureHidden('template_json');             // lo crea si falta
+  const hiddenB64 = ensureHidden('huella_b64');                // lo crea si falta
+
+  // UI
+  btn.disabled = true;
+  const original = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Capturando...';
+
+  try {
+    const resp = await fetch("{% url 'biometria_capturar' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": (function getCookie(name){
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+        })('csrftoken'),
+        "Accept": "application/json",
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      credentials: "same-origin"
+    });
+
+    const ct = resp.headers.get("content-type") || "";
+    if (!ct.includes("application/json")) {
+      const html = await resp.text();
+      throw new Error(`Respuesta no JSON (${resp.status}). ${html.slice(0,200)}...`);
+    }
+
+    const data = await resp.json();
+    if (!resp.ok || !data.ok) {
+      throw new Error(data.error || `Error HTTP ${resp.status}`);
+    }
+
+    // 2) Guardar resultados en los hidden (ya existen seguro)
+    hiddenTpl.value = JSON.stringify(data.template_json || []);
+    hiddenB64.value = data.huella_b64 || '';
+
+    // 3) Preview opcional
+    if (codeInput) {
+      const preview = data.huella_b64 ? data.huella_b64.slice(0,12) : 'capturada';
+      codeInput.value = `HUELLA-${preview}...`;
+    }
+    if (status) {
+      status.style.display = 'block';
+      status.textContent = 'Huella capturada correctamente';
+    }
+  } catch (e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error capturando huella',
+      text: String(e).replace(/^Error:\s*/, ''),
+      confirmButtonColor: '#008F39'
+    });
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
+}
+        // Guardar nuevo personal
+        function saveNewPerson() {
+            const nombres = document.getElementById('nombres').value.trim();
+            const apellidos = document.getElementById('apellidos').value.trim();
+            const tipoDocumento = document.getElementById('tipo_documento').value;
+            const numeroDocumento = document.getElementById('numero_documento').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const fechaNacimiento = document.getElementById('fecha_nacimiento').value;
+            const genero = document.getElementById('genero').value;
+            const direccion = document.getElementById('direccion').value.trim();
+            const epsId = document.getElementById('eps_id').value;
+            const huellaB64 = document.getElementById('huella_b64').value; // <-- lo importante
+
+            if (!nombres || !apellidos || !tipoDocumento || !numeroDocumento) {
+                Swal.fire({ icon: 'error', title: 'Campos requeridos', text: 'Por favor complete todos los campos obligatorios', confirmButtonColor: '#008F39' });
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('nombres', nombres);
+            formData.append('apellidos', apellidos);
+            formData.append('tipo_documento', tipoDocumento);
+            formData.append('numero_documento', numeroDocumento);
+            formData.append('correo', correo);
+            formData.append('telefono', telefono);
+            formData.append('fecha_nacimiento', fechaNacimiento);
+            formData.append('genero', genero);
+            formData.append('direccion', direccion);
+            formData.append('eps_id', epsId);
+            formData.append('huella_b64', huellaB64); // enviar huella
+
+            Swal.fire({
+                title: 'Guardando...',
+                text: 'Por favor espere mientras se guarda el personal',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            fetch("{% url 'add_personnel_ajax' %}", {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok || data.success) {
+                    Swal.fire({ icon: 'success', title: '¡Personal agregado exitosamente!', text: (data.message || 'Registro creado'), confirmButtonColor: '#008F39' })
+                        .then(() => {
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('addPersonModal'));
+                            if (modal) modal.hide();
+                            location.reload();
+                        });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error', text: (data.error || data.message || 'No se pudo guardar'), confirmButtonColor: '#008F39' });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Hubo un problema al agregar el personal', confirmButtonColor: '#008F39' });
+            });
+        }
+
+        // Obtener datos / editar / eliminar (sin cambios funcionales aquí)
+        function getPersonData(personId) {
+            fetch(`/get-person/ajax/?person_id=${personId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) showEditModal(data.data);
+                    else Swal.fire({ icon: 'error', title: 'Error', text: data.message, confirmButtonColor: '#008F39' });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Error al obtener datos de la persona', confirmButtonColor: '#008F39' });
+                });
+        }
+
+        function showEditModal(personData) {
+            const modalHtml = `
+                <div class="modal fade" id="editPersonModal" tabindex="-1" aria-labelledby="editPersonModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #008F39 0%, #006b2e 100%); color: white;">
+                                <h5 class="modal-title" id="editPersonModalLabel">
+                                    <i class="fas fa-edit"></i> Editar Personal
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editPersonForm">
+                                    <input type="hidden" id="editPersonId" value="${personData.id}">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="editNombres" class="form-label">Nombres *</label>
+                                            <input type="text" class="form-control" id="editNombres" value="${personData.nombres}" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="editApellidos" class="form-label">Apellidos *</label>
+                                            <input type="text" class="form-control" id="editApellidos" value="${personData.apellidos}" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="editTipoDocumento" class="form-label">Tipo de Documento *</label>
+                                            <select class="form-select" id="editTipoDocumento" required>
+                                                <option value="Cédula de ciudadanía" ${personData.tipo_documento === 'Cédula de ciudadanía' ? 'selected' : ''}>Cédula de ciudadanía</option>
+                                                <option value="Tarjeta de identidad" ${personData.tipo_documento === 'Tarjeta de identidad' ? 'selected' : ''}>Tarjeta de identidad</option>
+                                                <option value="Cédula de extranjería" ${personData.tipo_documento === 'Cédula de extranjería' ? 'selected' : ''}>Cédula de extranjería</option>
+                                                <option value="Pasaporte" ${personData.tipo_documento === 'Pasaporte' ? 'selected' : ''}>Pasaporte</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="editNumeroDocumento" class="form-label">Número de Documento *</label>
+                                            <input type="text" class="form-control" id="editNumeroDocumento" value="${personData.numero_documento}" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                       <div class="col-md-6 mb-3">
+    <label for="biometric_code" class="form-label">Datos de Huella Digital</label>
+    <div class="input-group">
+        <input type="text" class="form-control" id="biometric_code" 
+               value="${personData.datos_huella ? 'HUELLA-' + personData.datos_huella.slice(0, 12) + '...' : ''}" 
+               placeholder="Huella no registrada" readonly>
+        <button class="btn btn-outline-primary" type="button" 
+                onclick="captureFingerprint(this)">
+            Capturar
+        </button>
+        <button type="button" class="btn btn-outline-info" onclick="verificarHuella(${personData.id})">
+    Verificar Huella
+</button>
+    </div>
+    <input type="hidden" id="huella_b64" name="huella_b64">
+    <small id="fingerprintStatus" class="form-text text-success" style="display:none;">
+        Huella capturada correctamente
+    </small>
+</div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                <button type="button" class="btn btn-success" onclick="savePersonEdit()">
+                                    <i class="fas fa-save"></i> Guardar Cambios
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const existingModal = document.getElementById('editPersonModal');
+            if (existingModal) existingModal.remove();
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            const modal = new bootstrap.Modal(document.getElementById('editPersonModal'));
+            modal.show();
+        }
+
+    function verificarHuella(personId) {
+    Swal.fire({ title: 'Coloque el dedo para verificar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+    const formData = new FormData();
+    formData.append('person_id', personId);
+
+   fetch("{% url 'verify_fingerprint_ajax' %}", {
+    method: 'POST',
+    body: formData,
+    headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value }
+})
+.then(async (r) => {
+    const ct = r.headers.get("content-type") || "";
+    if (!ct.includes("application/json")) {
+        const html = await r.text();
+        throw new Error(`Respuesta no JSON (${r.status}):\n${html.slice(0, 200)}...`);
+    }
+    return r.json();
+})
+.then(data => {
+    Swal.close();
+    if (data.ok) {
+        if (data.match) {
+            Swal.fire({ icon: 'success', title: 'Huella verificada', text: `Coincidencia (score: ${data.score})` });
+        } else {
+            Swal.fire({ icon: 'error', title: 'No coincide', text: `Coincidencia (score: ${data.score})` });
+        }
+    } else {
+        Swal.fire({ icon: 'error', title: 'Error', text: data.error || 'Error desconocido' });
+    }
+})
+.catch(err => {
+    Swal.close();
+    Swal.fire({ icon: 'error', title: 'Error', text: String(err) });
+});
+
+}
+
+
+async function savePersonEdit(btn) {
+  const personId = document.getElementById('editPersonId').value;
+  const nombres = document.getElementById('editNombres').value.trim();
+  const apellidos = document.getElementById('editApellidos').value.trim();
+  const tipoDocumento = document.getElementById('editTipoDocumento').value;
+  const numeroDocumento = document.getElementById('editNumeroDocumento').value.trim();
+  const correo = document.getElementById('editCorreo').value.trim();
+
+  const huellaB64   = document.getElementById('huella_b64')?.value || '';
+  const tplJsonRaw  = document.getElementById('template_json')?.value || ''; // debe venir de captureFingerprint
+
+  if (!nombres || !apellidos || !tipoDocumento || !numeroDocumento) {
+    Swal.fire({ icon: 'error', title: 'Campos requeridos', text: 'Por favor complete todos los campos obligatorios', confirmButtonColor: '#008F39' });
+    return;
+  }
+
+  // (Opcional) Si quieres obligar a que SOLO si el usuario intentó capturar huella, se valide que al menos uno exista:
+  // if (document.getElementById('capturoHuellaFlag')?.value === '1' && !(tplJsonRaw || huellaB64)) {
+  //   Swal.fire({ icon: 'warning', title: 'Huella no capturada', text: 'Intenta capturar la huella nuevamente.', confirmButtonColor: '#008F39' });
+  //   return;
+  // }
+
+  const formData = new FormData();
+  formData.append('person_id', personId);
+  formData.append('nombres', nombres);
+  formData.append('apellidos', apellidos);
+  formData.append('tipo_documento', tipoDocumento);
+  formData.append('numero_documento', numeroDocumento);
+  formData.append('correo', correo);
+
+  // Enviar template_json SOLO si existe
+  if (tplJsonRaw) {
+    // Aseguramos que sea un string JSON válido (por si alguien puso un objeto accidentalmente)
+    try {
+      const maybeObj = JSON.parse(tplJsonRaw);             // si no es JSON válido, lanzará error
+      formData.append('template_json', JSON.stringify(maybeObj));
+    } catch {
+      // Si ya viene como string JSON válido, lo ponemos como está
+      formData.append('template_json', tplJsonRaw);
+    }
+  }
+
+  // Enviar huella_b64 SOLO si existe (compatibilidad)
+  if (huellaB64) {
+    formData.append('huella_b64', huellaB64);
+  }
+
+  const csrf = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+  const url  = "{% url 'edit_person_ajax' %}"; // usa el name de tu url
+
+  // UI: deshabilitar botón y mostrar spinner
+  let originalHtml;
+  if (btn) {
+    originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Guardando...';
+  }
+
+  try {
+    const resp = await fetch(url, {
+      method: 'POST',
+      body: formData,
+      headers: { 'X-CSRFToken': csrf }
+    });
+
+    const ct = resp.headers.get('content-type') || '';
+    if (!ct.includes('application/json')) {
+      const html = await resp.text();
+      throw new Error(`Respuesta no JSON (${resp.status}): ${html.slice(0,200)}...`);
+    }
+
+    const data = await resp.json();
+
+    if (data.success) {
+      const extra = data.fingerprint_updated ? ' (huella actualizada)' : '';
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Personal actualizado exitosamente!',
+        text: (data.message || 'Actualización correcta') + extra,
+        confirmButtonColor: '#008F39'
+      });
+      const modal = bootstrap.Modal.getInstance(document.getElementById('editPersonModal'));
+      if (modal) modal.hide();
+      location.reload();
+    } else {
+      throw new Error(data.message || 'Error desconocido');
+    }
+  } catch (err) {
+    console.error(err);
+    Swal.fire({ icon: 'error', title: 'Error', text: String(err).replace(/^Error:\s*/, ''), confirmButtonColor: '#008F39' });
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+    }
+  }
+}
+
+
+
+        function editPerson(personId) { getPersonData(personId); }
+
+        function deletePerson(personId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¡No podrás revertir esta acción!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('person_id', personId);
+
+                    fetch('/delete-person/ajax/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({ icon: 'success', title: '¡Eliminado!', text: data.message, confirmButtonColor: '#008F39' })
+                                .then(() => location.reload());
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Error', text: data.message, confirmButtonColor: '#008F39' });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({ icon: 'error', title: 'Error', text: 'Hubo un problema al eliminar el personal', confirmButtonColor: '#008F39' });
+                    });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Dashboard loaded successfully');
+            {% if messages %}
+                {% for message in messages %}
+                    Swal.fire({ icon: 'success', title: 'Éxito', text: '{{ message|escapejs }}', confirmButtonColor: '#008F39' });
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+</body>
+</html>
