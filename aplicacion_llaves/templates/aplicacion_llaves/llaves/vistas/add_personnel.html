@@ -672,6 +672,7 @@ async function captureFingerprint(btn) {
             const direccion = document.getElementById('direccion').value.trim();
             const epsId = document.getElementById('eps_id').value;
             const huellaB64 = document.getElementById('huella_b64').value; // <-- lo importante
+            const templateJson = document.getElementById('template_json')?.value || '';
 
             if (!nombres || !apellidos || !tipoDocumento || !numeroDocumento) {
                 Swal.fire({ icon: 'error', title: 'Campos requeridos', text: 'Por favor complete todos los campos obligatorios', confirmButtonColor: '#008F39' });
@@ -689,6 +690,9 @@ async function captureFingerprint(btn) {
             formData.append('genero', genero);
             formData.append('direccion', direccion);
             formData.append('eps_id', epsId);
+            if (templateJson) {
+                formData.append('template_json', templateJson);
+            }
             formData.append('huella_b64', huellaB64); // enviar huella
 
             Swal.fire({
@@ -842,9 +846,17 @@ async function captureFingerprint(btn) {
     Swal.close();
     if (data.ok) {
         if (data.match) {
-            Swal.fire({ icon: 'success', title: 'Huella verificada', text: `Coincidencia (score: ${data.score})` });
+            Swal.fire({
+                icon: 'success',
+                title: 'Huella verificada',
+                text: `${data.message} (score: ${data.score})`
+            });
         } else {
-            Swal.fire({ icon: 'error', title: 'No coincide', text: `Coincidencia (score: ${data.score})` });
+            Swal.fire({
+                icon: 'error',
+                title: 'No coincide',
+                text: `${data.message} (score: ${data.score})`
+            });
         }
     } else {
         Swal.fire({ icon: 'error', title: 'Error', text: data.error || 'Error desconocido' });

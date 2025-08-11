@@ -1074,9 +1074,20 @@ def verify_fingerprint_ajax(request):
         score = sensor.compareCharacteristics()
 
         if score > 0:
-            return JsonResponse({'ok': True, 'match': True, 'score': score, 'message': 'Huella verificada correctamente'})
+            return JsonResponse({
+                'ok': True,
+                'match': True,
+                'score': score,
+                # Mensaje más descriptivo para la interfaz
+                'message': 'La huella coincide con la almacenada en la base de datos'
+            })
         else:
-            return JsonResponse({'ok': True, 'match': False, 'score': score, 'message': 'La huella no coincide'})
+            return JsonResponse({
+                'ok': True,
+                'match': False,
+                'score': score,
+                'message': 'La huella no coincide'
+            })
 
     except Exception as e:
         return JsonResponse({'ok': False, 'error': f'Error verificando huella: {e}'}, status=500)
