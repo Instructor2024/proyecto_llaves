@@ -63,8 +63,20 @@
         .search-filter-form { display:grid; grid-template-columns: 1fr 1fr auto; gap:20px; align-items:end; }
         .form-group { margin-bottom:0; }
         .form-label { font-weight:600; color:#555; margin-bottom:8px; }
-        .form-control, .form-select { border:2px solid #e0e0e0; border-radius:12px; padding:12px 15px; font-size:.95rem; transition:.3s; }
-        .form-control:focus, .form-select:focus { border-color:#008F39; box-shadow:0 0 0 .2rem rgba(0,143,57,.25); }
+        .form-control, .form-select {
+            border:2px solid #e0e0e0;
+            border-radius:12px;
+            padding:12px 15px;
+            font-size:.95rem;
+            transition:.3s;
+            background-color:#fdfdfd;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color:#008F39;
+            box-shadow:0 0 0 .2rem rgba(0,143,57,.25),0 8px 15px rgba(0,143,57,.1);
+            background-color:#fff;
+        }
         .btn-search { background: linear-gradient(135deg, #008F39 0%, #006b2e 100%); border:none; color:white; border-radius:12px; padding:12px 25px; font-weight:600; transition:.3s; }
         .btn-search:hover { transform: translateY(-2px); box-shadow:0 8px 25px rgba(0,143,57,.3); color:white; }
         .btn-clear { background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); border:none; color:white; border-radius:12px; padding:12px 20px; font-weight:600; transition:.3s; }
@@ -409,15 +421,13 @@
                                             <label for="nombres" class="form-label fw-bold">
                                                 <i class="fas fa-user me-1"></i> Nombres *
                                             </label>
-                                            <input type="text" class="form-control form-control-lg" id="nombres" name="nombres"
-                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                            <input type="text" class="form-control form-control-lg" id="nombres" name="nombres" placeholder="Ingrese nombres" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="apellidos" class="form-label fw-bold">
                                                 <i class="fas fa-user me-1"></i> Apellidos *
                                             </label>
-                                            <input type="text" class="form-control form-control-lg" id="apellidos" name="apellidos"
-                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                            <input type="text" class="form-control form-control-lg" id="apellidos" name="apellidos" placeholder="Ingrese apellidos" required>
                                         </div>
                                     </div>
 
@@ -432,8 +442,7 @@
                                             <label for="tipo_documento" class="form-label fw-bold">
                                                 <i class="fas fa-file-alt me-1"></i> Tipo de Documento *
                                             </label>
-                                            <select class="form-select form-select-lg" id="tipo_documento" name="tipo_documento"
-                                                    style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                            <select class="form-select form-select-lg" id="tipo_documento" name="tipo_documento" required>
                                                 <option value="">Seleccione tipo de documento</option>
                                                 <option value="Cédula de ciudadanía">Cédula de ciudadanía</option>
                                                 <option value="Tarjeta de identidad">Tarjeta de identidad</option>
@@ -445,8 +454,7 @@
                                             <label for="numero_documento" class="form-label fw-bold">
                                                 <i class="fas fa-hashtag me-1"></i> Número de Documento *
                                             </label>
-                                            <input type="text" class="form-control form-control-lg" id="numero_documento" name="numero_documento"
-                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;" required>
+                                            <input type="text" class="form-control form-control-lg" id="numero_documento" name="numero_documento" placeholder="Ingrese número de documento" required>
                                         </div>
                                     </div>
 
@@ -461,15 +469,13 @@
                                             <label for="correo" class="form-label fw-bold">
                                                 <i class="fas fa-envelope me-1"></i> Correo Electrónico
                                             </label>
-                                            <input type="email" class="form-control form-control-lg" id="correo" name="correo"
-                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                            <input type="email" class="form-control form-control-lg" id="correo" name="correo" placeholder="correo@ejemplo.com">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="telefono" class="form-label fw-bold">
                                                 <i class="fas fa-phone me-1"></i> Teléfono
                                             </label>
-                                            <input type="text" class="form-control form-control-lg" id="telefono" name="telefono"
-                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                            <input type="text" class="form-control form-control-lg" id="telefono" name="telefono" placeholder="Ingrese teléfono">
                                         </div>
                                     </div>
 
@@ -484,15 +490,13 @@
                                             <label for="fecha_nacimiento" class="form-label fw-bold">
                                                 <i class="fas fa-calendar me-1"></i> Fecha de Nacimiento
                                             </label>
-                                            <input type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento"
-                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                            <input type="date" class="form-control form-control-lg" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Seleccione fecha">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="genero" class="form-label fw-bold">
                                                 <i class="fas fa-venus-mars me-1"></i> Género
                                             </label>
-                                            <select class="form-select form-select-lg" id="genero" name="genero"
-                                                    style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                            <select class="form-select form-select-lg" id="genero" name="genero">
                                                 <option value="">Seleccione género</option>
                                                 <option value="Masculino">Masculino</option>
                                                 <option value="Femenino">Femenino</option>
@@ -503,15 +507,13 @@
                                             <label for="direccion" class="form-label fw-bold">
                                                 <i class="fas fa-map-marker-alt me-1"></i> Dirección
                                             </label>
-                                            <input type="text" class="form-control form-control-lg" id="direccion" name="direccion"
-                                                   style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                            <input type="text" class="form-control form-control-lg" id="direccion" name="direccion" placeholder="Ingrese dirección">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="eps_id" class="form-label fw-bold">
                                                 <i class="fas fa-heartbeat me-1"></i> EPS
                                             </label>
-                                            <select class="form-select form-select-lg" id="eps_id" name="eps_id"
-                                                    style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                            <select class="form-select form-select-lg" id="eps_id" name="eps_id">
                                                 <option value="1">EPS por defecto</option>
                                             </select>
                                         </div>
@@ -531,7 +533,7 @@
                                             <div class="input-group">
                                                 <input type="text" class="form-control form-control-lg" id="biometric_code" name="biometric_code"
                                                        placeholder="Código de huella digital" readonly
-                                                       style="border-radius: 12px 0 0 12px; border: 2px solid #e0e0e0;">
+                                                       style="border-radius: 12px 0 0 12px;">
                                                 <button type="button" class="btn btn-primary btn-lg" onclick="captureFingerprint(this)"
                                                         style="border-radius: 0 12px 12px 0; background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); border: none;">
                                                     <i class="fas fa-fingerprint me-2"></i> Capturar Huella
