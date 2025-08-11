@@ -1,0 +1,268 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Eliminar todos los bordes verdes globalmente */
+* {
+    border-color: transparent !important;
+}
+
+body, .container, .dashboard, .sidebar, .main-content {
+    border: none !important;
+    background: white !important;
+}
+
+body {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px;
+    border: none;
+}
+
+.container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    height: calc(100vh - 20px);
+    border: none;
+}
+
+.dashboard {
+    background-color: white;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    box-shadow: none;
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 320px; /* Cambiado de 280px a 320px */
+    min-width: 320px; /* Cambiado de 280px a 320px */
+    background-color: #f0ebfa;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 0;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    color: #008F39;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.welcome {
+    font-size: 14px;
+    color: #008F39;
+    font-weight: 500;
+}
+
+.user-name {
+    font-weight: 600;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #333;
+}
+
+.role {
+    color: #008F39;
+    font-weight: 600;
+}
+
+/* Estilos para elementos clickeables */
+.clickable-user {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+}
+
+.clickable-user:hover {
+    color: #006400;
+    text-decoration-color: #006400;
+    transform: scale(1.05);
+}
+
+.nav-menu ul {
+    list-style: none;
+}
+
+.nav-menu li {
+    margin-bottom: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.nav-menu li.active {
+    background-color: #e6e0f5;
+}
+
+.nav-menu a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.nav-menu a:hover {
+    background-color: #e6e0f5;
+}
+
+.nav-menu svg {
+    margin-right: 10px;
+    color: #333;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    min-width: 0;
+}
+
+/* Header más compacto */
+.header {
+    background-color: #008F39;
+    padding: 15px 40px; /* Reducido de 25px a 15px el padding vertical */
+    text-align: center;
+    color: white;
+    margin-bottom: 30px; /* Reducido de 40px a 30px */
+    border-radius: 50px;
+}
+
+.header h1 {
+    font-size: 28px; /* Reducido de 32px a 28px */
+    font-weight: 500;
+    margin: 0;
+}
+
+.content {
+    padding: 0 20px;
+    flex: 1;
+}
+
+.content h2 {
+    color: #008F39;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.content p {
+    color: #333;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.bottom-decoration {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.bottom-key {
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+}
+
+.green-circle {
+    width: 120px;
+    height: 120px;
+    background-color: #008F39;
+    border-radius: 50%;
+    position: absolute;
+    right: -40px;
+    bottom: -40px;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+    
+    .container {
+        height: calc(100vh - 10px);
+    }
+    
+    .dashboard {
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    .sidebar {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .main-content {
+        padding: 20px;
+    }
+    
+    .header {
+        padding: 12px 30px; /* Más compacto en móvil también */
+        margin-bottom: 20px;
+    }
+    
+    .header h1 {
+        font-size: 22px; /* Más pequeño en móvil */
+    }
+    
+    .content h2 {
+        font-size: 22px;
+    }
+    
+    .content p {
+        font-size: 14px;
+    }
+}
+
+/* Para pantallas muy grandes */
+@media (min-width: 1400px) {
+    .header h1 {
+        font-size: 30px; /* Reducido de 36px */
+    }
+    
+    .content h2 {
+        font-size: 32px;
+    }
+    
+    .content p {
+        font-size: 18px;
+    }
+}
