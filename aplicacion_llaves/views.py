@@ -744,10 +744,10 @@ def edit_person_ajax(request):
                 tpl = json.loads(template_json_str)
                 if not (isinstance(tpl, list) and all(isinstance(x, int) for x in tpl)):
                     return JsonResponse({'success': False, 'message': 'template_json inválido (se espera lista de enteros)'})
-                # Si el campo es BinaryField/LongBlob guarda como bytes UTF-8:
-                biometric_blob = json.dumps(tpl).encode('utf-8')
-                # Si tu campo fuera TextField/JSONField, usa en su lugar:
-                # biometric_blob = json.dumps(tpl)
+                # Guardar como texto JSON (el campo biometric_code es TextField)
+                # Si alguna vez se cambia a BinaryField/LongBlob, reemplazar por
+                # `json.dumps(tpl).encode("utf-8")`
+                biometric_blob = json.dumps(tpl)
                 update_bio = True
             except Exception:
                 return JsonResponse({'success': False, 'message': 'template_json no es JSON válido'})
@@ -928,10 +928,10 @@ def add_personnel_ajax(request):
                 tpl = json.loads(template_json_str)
                 if not (isinstance(tpl, list) and all(isinstance(x, int) for x in tpl)):
                     return JsonResponse({'ok': False, 'error': 'template_json inválido (se espera lista de enteros)'}, status=400)
-                # Si biometric_code es BinaryField/LongBlob:
-                biometric_blob = json.dumps(tpl).encode('utf-8')
-                # Si fuera TextField/JSONField, usar:
-                # biometric_blob = json.dumps(tpl)
+                # Guardar como texto JSON (el campo biometric_code es TextField).
+                # Si el campo cambiara a BinaryField/LongBlob, usar
+                # `json.dumps(tpl).encode("utf-8")`.
+                biometric_blob = json.dumps(tpl)
             except Exception:
                 return JsonResponse({'ok': False, 'error': 'template_json no es JSON válido'}, status=400)
         else:
@@ -1060,6 +1060,13 @@ def verify_fingerprint_ajax(request):
         # Si viene como bytes (BinaryField/LongBlob) -> decodificar a str
         if isinstance(raw, (bytes, bytearray, memoryview)):
             raw = bytes(raw).decode('utf-8')
+        if isinstance(raw, str):
+            raw = raw.strip()
+            # Compatibilidad: texto con prefijo b'' (huellas antiguas)
+            if raw.startswith("b'") and raw.endswith("'"):
+                raw = raw[2:-1]
+            if raw.startswith('b"') and raw.endswith('"'):
+                raw = raw[2:-1]
 
         try:
             stored_list = json.loads(raw)  # list[int]
@@ -1074,9 +1081,20 @@ def verify_fingerprint_ajax(request):
         score = sensor.compareCharacteristics()
 
         if score > 0:
-            return JsonResponse({'ok': True, 'match': True, 'score': score, 'message': 'Huella verificada correctamente'})
+            return JsonResponse({
+                'ok': True,
+                'match': True,
+                'score': score,
+                # Mensaje más descriptivo para la interfaz
+                'message': 'La huella coincide con la almacenada en la base de datos'
+            })
         else:
-            return JsonResponse({'ok': True, 'match': False, 'score': score, 'message': 'La huella no coincide'})
+            return JsonResponse({
+                'ok': True,
+                'match': False,
+                'score': score,
+                'message': 'La huella no coincide'
+            })
 
     except Exception as e:
         return JsonResponse({'ok': False, 'error': f'Error verificando huella: {e}'}, status=500)
