@@ -782,10 +782,16 @@ async function captureFingerprint(btn) {
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="editCorreo" class="form-label">Correo Electrónico</label>
+                                            <input type="email" class="form-control" id="editCorreo" value="${personData.correo || ''}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                        <div class="col-md-6 mb-3">
     <label for="biometric_code" class="form-label">Datos de Huella Digital</label>
     <div class="input-group">
-        <input type="text" class="form-control" id="biometric_code" 
+        <input type="text" class="form-control" id="biometric_code"
                value="${personData.datos_huella ? 'HUELLA-' + personData.datos_huella.slice(0, 12) + '...' : ''}" 
                placeholder="Huella no registrada" readonly>
         <button class="btn btn-outline-primary" type="button" 
@@ -808,7 +814,7 @@ async function captureFingerprint(btn) {
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                     <i class="fas fa-times"></i> Cancelar
                                 </button>
-                                <button type="button" class="btn btn-success" onclick="savePersonEdit()">
+                                <button type="button" class="btn btn-success" onclick="savePersonEdit(this)">
                                     <i class="fas fa-save"></i> Guardar Cambios
                                 </button>
                             </div>
@@ -878,7 +884,8 @@ async function savePersonEdit(btn) {
   const apellidos = document.getElementById('editApellidos').value.trim();
   const tipoDocumento = document.getElementById('editTipoDocumento').value;
   const numeroDocumento = document.getElementById('editNumeroDocumento').value.trim();
-  const correo = document.getElementById('editCorreo').value.trim();
+  const correoEl = document.getElementById('editCorreo');
+  const correo = correoEl ? correoEl.value.trim() : '';
 
   const huellaB64   = document.getElementById('huella_b64')?.value || '';
   const tplJsonRaw  = document.getElementById('template_json')?.value || ''; // debe venir de captureFingerprint
